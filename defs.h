@@ -10,4 +10,7 @@ using namespace std;
 static const int MAX_LOANS = 3;
 static const int MAX_ARR = 50;
 
+enum class Condition{New, Fine, Acceptable, Poor};
+enum class Status{Available, Unavailable, Missing, Withdrawn};
+
 #endif // DEFS_H

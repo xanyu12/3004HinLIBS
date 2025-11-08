@@ -8,7 +8,6 @@
 class Boundary
 {
 public:
-
     string getSearchInput();
     CatalogueItem getCatalogueItem();
     void displayCatalogue(Catalogue& c);
