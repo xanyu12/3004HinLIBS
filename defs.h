@@ -7,7 +7,7 @@
 #include <string>
 using namespace std;
 
-#define MAX_LOANS = 3;
-#define MAX_ARR = 50;
+static const int MAX_LOANS = 3;
+static const int MAX_ARR = 50;
 
 #endif // DEFS_H

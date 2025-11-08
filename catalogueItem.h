@@ -6,7 +6,7 @@
 class CatalogueItem
 {
 public:
-    CatalogueItem(string i, string t, string c, int y, string co, string f, string ci);
+    CatalogueItem(string i="", string t="", string c="", int y=0, string co="", string f="", string ci="");
     virtual ~CatalogueItem();
 
     void checkOut();

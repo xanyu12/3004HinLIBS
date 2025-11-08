@@ -10,5 +10,5 @@ Catalogue::~Catalogue(){}
 
 void Catalogue::populate()
 {
-    FictionBook b1("B001", "", "", 0, "", "", "");
+    FictionBook b1("B001", "", "", 0, "", "", "", "");
 }
