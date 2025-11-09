@@ -84,12 +84,12 @@ private:
 
 class Magazine : public CatalogueItem{
 public:
-    Magazine(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, int issueNum, Date publicationDate);
+    Magazine(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string issueNum, Date publicationDate);
 
     int getIssueNumber();
     Date getPublicationDate();
 private:
-    int issueNumber_;
+    string issueNumber_;
     Date publicationDate_;
 };
 
