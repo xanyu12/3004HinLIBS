@@ -15,13 +15,16 @@ class Library
     void addUser(User& u);
     void loadCatalogue();
 
-    void searchCatalogue(string& s);
+    CatalogueItem* searchCatalogue(string& s);
     void checkInItem(CatalogueItem& i, Patron& p);
     void checkOutItem(CatalogueItem& i, Patron& p);
+    void createHold(CatalogueItem& i, Patron& p);
+    void cancelHold(CatalogueItem& i, Patron& p, Hold &h);
 
     double calculateFine(Date& d1, Date& d2);
 
     int getNumUsers();
+    Date getToday();
 
 private:
     Catalogue collection;

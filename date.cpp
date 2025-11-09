@@ -4,7 +4,6 @@ Date::Date(int d, int m, int y){
     setDate(d, m, y);
 }
 
-
 int Date::getDay(){return day;}
 int Date::getMonth(){return month;}
 int Date::getYear(){return year;}
@@ -13,16 +12,6 @@ void Date::setDate(int d, int m, int y){
     year = ((y > 0)? y : 0);
     month = ((m > 0 && m <= 12)? m:0);
     day = ((d > 0 && d <= lastDayInMonth(m, y)) ? d : 0);
-}
-
-void Date::getCurrentDate(){
-    time_t now = time(0);
-    tm* localTime = localtime(&now);
-    int year = localTime->tm_year + 1900;
-    int month =localTime->tm_mon + 1;
-    int day = localTime->tm_mday;
-
-    setDate(day, month, year);
 }
 
 int Date::lastDayInMonth(int m, int y){

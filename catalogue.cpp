@@ -68,6 +68,15 @@ void Catalogue::addItem(CatalogueItem& i)
     }
 }
 
+CatalogueItem* Catalogue::search(string& s){
+    for(int i = 0; i < numItems; ++i){
+        if(catalogueArr[i].getTitle() == s){
+            return &catalogueArr[i];
+        }
+    }
+    return nullptr;
+}
+
 
 
 

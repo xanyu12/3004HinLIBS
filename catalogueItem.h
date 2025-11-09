@@ -20,6 +20,10 @@ public:
     Condition getCondition();
     string getFormat();
     Status getCirculationStatus();
+    int getQueueSize();
+
+    void removeFromQueue(Hold& h);
+    void addToQueue(Hold& h);
 
 private:
     string itemID_;
@@ -30,6 +34,7 @@ private:
     string format_;
     Status circulationStatus_;
     Hold holdQueue[MAX_ARR];
+    int queueSize;
 };
 
 class Book : public CatalogueItem {

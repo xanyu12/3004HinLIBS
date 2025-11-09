@@ -27,13 +27,19 @@ public:
     string getCardNum();
     string getPin();
     double getAccountBalance();
+
     int getNumLoans();
+    int getNumHolds();
 
     void addLoan(Loan& l);
-    void addFine(Fine& f);
-    void addHold(Hold& h);
-    void payFine(Fine& f);
     Loan* getLoan(CatalogueItem& c);
+
+    void payFine(Fine& f);
+    void addFine(Fine& f);
+
+    void addHold(Hold& h);
+    void removeHold(Hold& h);
+
 
  private:
     string libCardNum;

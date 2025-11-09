@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "date.h"
+#include <ctime>
 
 #include <string>
 using namespace std;

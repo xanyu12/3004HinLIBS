@@ -14,8 +14,11 @@ public:
     void searchCatalogue();
     void checkOutItem();
     void checkInItem();
+    void placeHold();
+    void cancelHold();
     void loadLibrary();
     void getCurrentDate();
+
 
 private:
     Boundary* ui;

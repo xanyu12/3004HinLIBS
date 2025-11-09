@@ -10,6 +10,9 @@ class Boundary
 public:
     string getSearchInput();
     CatalogueItem getCatalogueItem();
+    Patron getPatron();
+    Hold getHold();
+
     void displayCatalogue(Catalogue& c);
     void displayItem(CatalogueItem& i);
     void displayError(string& e);

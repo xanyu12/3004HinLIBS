@@ -4,13 +4,9 @@
 #include <string>
 using namespace std;
 
-#include <ctime>
-
 class Date{
 public:
     Date(int=0, int=0, int=2000);
-
-    void getCurrentDate();
 
     int getYear();
     int getMonth();

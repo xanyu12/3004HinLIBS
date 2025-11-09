@@ -1,7 +1,7 @@
 #include "catalogueItem.h"
 
 CatalogueItem::CatalogueItem(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus)
-    : itemID_(id), title_(title), creator_(creator), publicationYear_(publicationYear), condition_(condition), format_(format), circulationStatus_(circulationStatus){}
+    : itemID_(id), title_(title), creator_(creator), publicationYear_(publicationYear), condition_(condition), format_(format), circulationStatus_(circulationStatus), queueSize(0){}
 
 Book::Book(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string isbn)
     : CatalogueItem(id, title, creator, publicationYear, condition, format, circulationStatus), isbn_(isbn){}
@@ -52,6 +52,10 @@ Status CatalogueItem::getCirculationStatus(){
     return circulationStatus_;
 }
 
+int CatalogueItem::getQueueSize(){
+    return queueSize;
+}
+
 void CatalogueItem::checkIn(){
     circulationStatus_ = Status::Available;
 }
@@ -59,4 +63,29 @@ void CatalogueItem::checkIn(){
 void CatalogueItem::checkOut(){
     circulationStatus_ = Status::Available;
 
+}
+
+void CatalogueItem::addToQueue(Hold &h){
+    if(queueSize < MAX_ARR){
+        holdQueue[queueSize] = h;
+        queueSize++;
+    }else{
+        cout << "Maximum Holds Reached" << endl;
+    }
+}
+
+void CatalogueItem::removeFromQueue(Hold &h){
+    int idx = -1;
+    for(int i = 0; i < queueSize; ++i){
+        if(holdQueue[i].getHoldID() == h.getHoldID()){
+            idx = i;
+        }
+    }
+
+    if(idx != -1){
+        for(int j = idx; j < queueSize - 1; ++j){
+            holdQueue[j] = holdQueue[j+1];
+        }
+        queueSize--;
+    }
 }

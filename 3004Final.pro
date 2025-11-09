@@ -14,6 +14,7 @@ SOURCES += \
     control.cpp \
     date.cpp \
     fine.cpp \
+    hold.cpp \
     library.cpp \
     loan.cpp \
     main.cpp \

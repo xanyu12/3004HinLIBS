@@ -60,13 +60,29 @@ void Patron::addHold(Hold &h){
     }
 }
 
+void Patron::removeHold(Hold &h){
+    int idx = -1;
+    for(int i = 0; i < numHolds; ++i){
+        if(holdArr[i].getHoldID() == h.getHoldID()){
+            idx = i;
+        }
+    }
+
+    if(idx != -1){
+        for(int j = idx; j < numHolds - 1; ++j){
+            holdArr[j] = holdArr[j+1];
+        }
+        numHolds--;
+    }
+}
+
 void Patron::payFine(Fine &f){
     f.updateStatus();
 }
 
 Loan* Patron::getLoan(CatalogueItem &c){
     for(int i = 0; i < numLoans; ++i){
-        if(loanArr->getItem()->getID() == c.getID()){
+        if(loanArr[i].getItem()->getID() == c.getID()){
             return &loanArr[i];
         }
     }

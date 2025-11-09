@@ -12,7 +12,7 @@ public:
 
     void browse();
     void populate();
-    void search(string& s);
+    CatalogueItem* search(string& s);
     void addItem(CatalogueItem& i);
 
     string getID();

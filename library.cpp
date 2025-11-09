@@ -33,8 +33,8 @@ void Library::addUser(User& u){
   }
 }
 
-void Library::searchCatalogue(string &s){
-    collection.search(s);
+CatalogueItem* Library::searchCatalogue(string &s){
+    return collection.search(s);
 }
 
 double Library::calculateFine(Date &d1, Date &d2){
@@ -46,14 +46,25 @@ double Library::calculateFine(Date &d1, Date &d2){
     return 0.00;
 }
 
+Date Library::getToday(){
+    time_t now = time(0);
+    tm* localTime = localtime(&now);
+    int year = localTime->tm_year + 1900;
+    int month =localTime->tm_mon + 1;
+    int day = localTime->tm_mday;
+
+    Date today = Date(day, month, year);
+    return today;
+}
+
 void Library::checkInItem(CatalogueItem &i, Patron& p){
     Loan* thisLoan = p.getLoan(i);
-    Date returnDay(12, 12, 12);
+    Date returnDay = getToday();
     Date loanDay = thisLoan->getLoanDate();
     double total = calculateFine(loanDay, returnDay);
     if(total > 0.00){
-        string id = i.getTitle() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-        Fine f("", total);
+        string id = "F" + i.getID() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+        Fine f(id, total);
         p.addFine(f);
         thisLoan->setFine(total);
     }
@@ -62,9 +73,23 @@ void Library::checkInItem(CatalogueItem &i, Patron& p){
 }
 
 void Library::checkOutItem(CatalogueItem &i, Patron& p){
-    Date loanDay(0,0,0);
-    string id = i.getTitle() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-    Loan newLoan(id, Date(0,0,0), 0, 0.0);
+    Date loanDay = getToday();
+    string id = "L" + i.getID() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+    Loan newLoan(id, loanDay, 0, 0.0);
     i.checkOut();
     p.addLoan(newLoan);
 }
+
+void Library::createHold(CatalogueItem &i, Patron &p){
+    string id = "H" + i.getID() + p.getUserID() + to_string(i.getQueueSize());
+    Hold h(id);
+    p.addHold(h);
+    i.addToQueue(h);
+}
+
+void Library::cancelHold(CatalogueItem &i, Patron &p, Hold &h){
+    i.removeFromQueue(h);
+    p.removeHold(h);
+}
+
+
