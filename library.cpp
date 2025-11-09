@@ -1,6 +1,6 @@
 #include "library.h"
 
-Library::Library(){}
+Library::Library(){numUsers = 0;}
 
 void Library::populateUsers(){
     Patron p1("julia74", "Julia Salvatore", "101000001", "1234", "julia1974@gmail.com", 0.0, true);
@@ -27,6 +27,7 @@ void Library::loadCatalogue(){
 void Library::addUser(User& u){
   if(numUsers < MAX_ARR){
       users[numUsers] = u;
+      numUsers++;
   }else{
       cout << "Maximum Users Reached" << endl;
   }

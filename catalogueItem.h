@@ -2,6 +2,7 @@
 #define CATALOGUEITEM_H
 
 #include "defs.h"
+#include "hold.h"
 
 class CatalogueItem
 {
@@ -11,8 +12,6 @@ public:
 
     void checkOut();
     void checkIn();
-    void placeHold();
-    void cancelHold();
 
     string getID();
     string getTitle();
@@ -30,6 +29,7 @@ private:
     Condition condition_;
     string format_;
     Status circulationStatus_;
+    Hold holdQueue[MAX_ARR];
 };
 
 class Book : public CatalogueItem {

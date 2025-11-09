@@ -4,15 +4,13 @@
 #include "defs.h"
 #include "loan.h"
 #include "fine.h"
+#include "hold.h"
 
 class User
 {
 public:
     User(string="", string="", string="");
-    virtual ~User();
-
-    void addUser();
-    void populate();
+    ~User();
 
 private:
     string userID;
@@ -28,6 +26,7 @@ public:
     string getPin();
     double getAccountBalance();
 
+
  private:
     string libCardNum;
     string pin;
@@ -35,6 +34,7 @@ public:
     bool accountStatus;
     Loan loanArr[MAX_LOANS];
     Fine paymentHistory[MAX_ARR];
+    Hold holdArr[MAX_ARR];
 
 };
 
