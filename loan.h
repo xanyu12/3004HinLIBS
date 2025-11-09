@@ -2,6 +2,7 @@
 #define LOAN_H
 
 #include "defs.h"
+#include "catalogueItem.h"
 
 class Loan{
 public:
@@ -13,9 +14,13 @@ public:
     Date getReturnDate();
     double getFineIncurred();
 
+    void setReturnDate(Date& d);
+    void setFine(double f);
+    CatalogueItem* getItem();
 
 private:
     string loanID;
+    CatalogueItem* item;
     Date loanDate;
     Date returnDate;
     double fineIncurred;

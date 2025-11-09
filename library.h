@@ -16,8 +16,10 @@ class Library
     void loadCatalogue();
 
     void searchCatalogue(string& s);
-    void checkInItem(CatalogueItem& i);
-    void checkOutItem(CatalogueItem& i);
+    void checkInItem(CatalogueItem& i, Patron& p);
+    void checkOutItem(CatalogueItem& i, Patron& p);
+
+    double calculateFine(Date& d1, Date& d2);
 
     int getNumUsers();
 

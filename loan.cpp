@@ -20,3 +20,15 @@ Date Loan::getReturnDate(){
 double Loan::getFineIncurred(){
     return fineIncurred;
 }
+
+void Loan::setFine(double f){
+    fineIncurred = f;
+}
+
+void Loan::setReturnDate(Date &d){
+    returnDate = d;
+}
+
+CatalogueItem* Loan::getItem(){
+    return item;
+}

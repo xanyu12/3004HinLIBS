@@ -15,6 +15,16 @@ void Date::setDate(int d, int m, int y){
     day = ((d > 0 && d <= lastDayInMonth(m, y)) ? d : 0);
 }
 
+void Date::getCurrentDate(){
+    time_t now = time(0);
+    tm* localTime = localtime(&now);
+    int year = localTime->tm_year + 1900;
+    int month =localTime->tm_mon + 1;
+    int day = localTime->tm_mday;
+
+    setDate(day, month, year);
+}
+
 int Date::lastDayInMonth(int m, int y){
     switch(m){
     case 2:
@@ -50,6 +60,10 @@ string Date::getMonthStr(int m){
     return months[m-1];
 }
 
+long Date::toDays(){
+    return year*360LL + (month - 1) * 30LL + day;
+}
+
 bool Date::operator==(Date& other){
     if(year == other.year && month == other.month && day == other.day){
         return true;
@@ -71,4 +85,8 @@ bool Date::operator<(Date& other){
         }
     }
     return false;
+}
+
+int Date::operator-(Date &other){
+    return toDays() - other.toDays();
 }

@@ -5,16 +5,18 @@
 
 class Fine{
 public:
-    Fine(string="", double=0.0, string="");
+    Fine(string="", double=0.0);
     ~Fine();
     string getFineID();
     double getAmount();
-    string getStatus();
+    bool getStatus();
+
+    void updateStatus();
 
 private:
     string fineID;
     double amount;
-    string status;
+    bool status;
 
 };
 

@@ -15,6 +15,7 @@ public:
     void checkOutItem();
     void checkInItem();
     void loadLibrary();
+    void getCurrentDate();
 
 private:
     Boundary* ui;

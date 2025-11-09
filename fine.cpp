@@ -1,9 +1,9 @@
 #include "fine.h"
 
-Fine::Fine(string i, double a, string s){
+Fine::Fine(string i, double a){
     fineID = i;
     amount = a;
-    status = s;
+    status=false;
 }
 
 Fine::~Fine(){}
@@ -14,6 +14,12 @@ string Fine::getFineID(){
 double Fine::getAmount(){
     return amount;
 }
-string Fine::getStatus(){
+bool Fine::getStatus(){
     return status;
+}
+
+void Fine::updateStatus(){
+    if(status == false){
+        status = true;
+    }
 }

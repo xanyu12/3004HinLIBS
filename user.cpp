@@ -6,6 +6,84 @@ User::User(string i, string n, string c){
     contact = c;
 }
 
-Patron::Patron(string i, string n, string c, string l, string p, double b, bool s) : User(i, n, c), libCardNum(l), pin(p), accountBalance(b), accountStatus(s){}
-Librarian::Librarian(string i, string n, string c, string p) : User(i, n, c), password(p){}
-Admin::Admin(string i, string n, string c, string p) : User(i, n, c), password(p){}
+string User::getUserID(){
+    return userID;
+}
+
+Patron::Patron(string i, string n, string c, string l, string p, double b, bool s)
+    : User(i, n, c), libCardNum(l), pin(p), accountBalance(b), accountStatus(s){
+    numFines = 0;
+    numHolds = 0;
+    numLoans = 0;
+}
+
+string Patron::getCardNum(){
+    return libCardNum;
+}
+
+string Patron::getPin(){
+    return pin;
+}
+
+double Patron::getAccountBalance(){
+    return accountBalance;
+}
+
+int Patron::getNumLoans(){
+    return numLoans;
+}
+
+void Patron::addLoan(Loan &l){
+    if(numLoans < MAX_LOANS){
+        loanArr[numLoans] = l;
+        numLoans++;
+    }else{
+        cout << "Maximum Loans" << endl;
+    }
+}
+
+void Patron::addFine(Fine &f){
+    if(numFines < MAX_ARR){
+        paymentHistory[numFines] = f;
+        numFines++;
+    }else{
+        cout << "Maximum Fines" << endl;
+    }
+}
+
+void Patron::addHold(Hold &h){
+    if(numHolds < MAX_ARR){
+        holdArr[numHolds] = h;
+        numHolds++;
+    }else{
+        cout << "Maximum Holds" << endl;
+    }
+}
+
+void Patron::payFine(Fine &f){
+    f.updateStatus();
+}
+
+Loan* Patron::getLoan(CatalogueItem &c){
+    for(int i = 0; i < numLoans; ++i){
+        if(loanArr->getItem()->getID() == c.getID()){
+            return &loanArr[i];
+        }
+    }
+    return nullptr;
+}
+
+Librarian::Librarian(string i, string n, string c, string p)
+    : User(i, n, c), password(p){}
+
+string Librarian::getPassword(){
+    return password;
+}
+
+Admin::Admin(string i, string n, string c, string p)
+    : User(i, n, c), password(p){}
+
+string Admin::getPassword(){
+    return password;
+}
+

@@ -32,3 +32,39 @@ void Library::addUser(User& u){
       cout << "Maximum Users Reached" << endl;
   }
 }
+
+void Library::searchCatalogue(string &s){
+    collection.search(s);
+}
+
+double Library::calculateFine(Date &d1, Date &d2){
+    if(d2 - d1 > LOAN_PERIOD){
+        int daysOverdue = (d2 - d1) - LOAN_PERIOD;
+        double fine = daysOverdue * 0.50;
+        return fine;
+    }
+    return 0.00;
+}
+
+void Library::checkInItem(CatalogueItem &i, Patron& p){
+    Loan* thisLoan = p.getLoan(i);
+    Date returnDay(12, 12, 12);
+    Date loanDay = thisLoan->getLoanDate();
+    double total = calculateFine(loanDay, returnDay);
+    if(total > 0.00){
+        string id = i.getTitle() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+        Fine f("", total);
+        p.addFine(f);
+        thisLoan->setFine(total);
+    }
+    thisLoan->setReturnDate(returnDay);
+    i.checkIn();
+}
+
+void Library::checkOutItem(CatalogueItem &i, Patron& p){
+    Date loanDay(0,0,0);
+    string id = i.getTitle() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+    Loan newLoan(id, Date(0,0,0), 0, 0.0);
+    i.checkOut();
+    p.addLoan(newLoan);
+}

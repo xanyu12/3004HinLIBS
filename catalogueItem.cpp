@@ -51,3 +51,12 @@ string CatalogueItem::getFormat(){
 Status CatalogueItem::getCirculationStatus(){
     return circulationStatus_;
 }
+
+void CatalogueItem::checkIn(){
+    circulationStatus_ = Status::Available;
+}
+
+void CatalogueItem::checkOut(){
+    circulationStatus_ = Status::Available;
+
+}

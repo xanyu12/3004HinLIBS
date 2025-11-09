@@ -12,6 +12,8 @@ public:
     User(string="", string="", string="");
     ~User();
 
+    string getUserID();
+
 private:
     string userID;
     string name;
@@ -25,7 +27,13 @@ public:
     string getCardNum();
     string getPin();
     double getAccountBalance();
+    int getNumLoans();
 
+    void addLoan(Loan& l);
+    void addFine(Fine& f);
+    void addHold(Hold& h);
+    void payFine(Fine& f);
+    Loan* getLoan(CatalogueItem& c);
 
  private:
     string libCardNum;
@@ -36,6 +44,9 @@ public:
     Fine paymentHistory[MAX_ARR];
     Hold holdArr[MAX_ARR];
 
+    int numLoans;
+    int numFines;
+    int numHolds;
 };
 
 class Librarian : public User{
