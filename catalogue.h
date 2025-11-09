@@ -14,8 +14,6 @@ public:
     void populate();
     void search(string& s);
     void addItem(CatalogueItem& i);
-    void checkOutItem(string& itemId);
-    void checkInItem(string& itemId);
 
     string getID();
     int getNumItems();

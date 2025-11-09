@@ -12,12 +12,19 @@ class Library
     ~Library();
 
     void populateUsers();
+    void addUser(User& u);
     void loadCatalogue();
+
     void searchCatalogue(string& s);
+    void checkInItem(CatalogueItem& i);
+    void checkOutItem(CatalogueItem& i);
+
+    int getNumUsers();
 
 private:
     Catalogue collection;
     User users[MAX_ARR];
+    int numUsers;
 
 };
 
