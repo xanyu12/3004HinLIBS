@@ -1,27 +1,28 @@
 #include "control.h"
 
-Control::Control(Boundary* b, Catalogue* c){
+Control::Control(Boundary* b, Library* l){
     ui = b;
-    catalogue = c;
+    library_ = l;
 }
 
-void Control::runSystem(){}
-
-
-void Control::searchCatalogue()
-{
+void Control::searchCatalogue(){
     string s = ui->getSearchInput();
-    catalogue->search(s);
+    library_->searchCatalogue(s);
 }
 
 void Control::checkOutItem(){
     CatalogueItem item = ui->getCatalogueItem();
     item.checkOut();
 }
+
 void Control::checkInItem(){
     CatalogueItem item = ui->getCatalogueItem();
     item.checkIn();
 }
-void Control::populateCatalogue(){
 
+void Control::loadLibrary(){
+    library_->loadCatalogue();
+    library_->populateUsers();
 }
+
+void Control::runSystem(){}

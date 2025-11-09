@@ -14,10 +14,10 @@ SOURCES += \
     control.cpp \
     date.cpp \
     fine.cpp \
+    library.cpp \
     loan.cpp \
     main.cpp \
     mainwindow.cpp \
-    patron.cpp \
     user.cpp
 
 HEADERS += \
@@ -29,9 +29,9 @@ HEADERS += \
     defs.h \
     fine.h \
     hold.h \
+    library.h \
     loan.h \
     mainwindow.h \
-    patron.h \
     user.h
 
 FORMS += \

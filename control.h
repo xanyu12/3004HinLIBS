@@ -3,21 +3,22 @@
 
 #include "defs.h"
 #include "boundary.h"
-#include "catalogue.h"
+#include "library.h"
+
 class Control
 {
 public:
-    Control(Boundary* b, Catalogue* c);
+    Control(Boundary* b, Library* l);
 
     void runSystem();
     void searchCatalogue();
     void checkOutItem();
     void checkInItem();
-    void populateCatalogue();
+    void loadLibrary();
 
 private:
     Boundary* ui;
-    Catalogue* catalogue;
+    Library* library_;
 
 };
 

@@ -45,6 +45,7 @@ private:
 class FictionBook : public Book{
 public:
     FictionBook(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string isbn);
+
 };
 
 class NonFictionBook : public Book{
@@ -88,6 +89,7 @@ public:
 
     int getIssueNumber();
     Date getPublicationDate();
+
 private:
     string issueNumber_;
     Date publicationDate_;

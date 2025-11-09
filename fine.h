@@ -5,7 +5,7 @@
 
 class Fine{
 public:
-    Fine();
+    Fine(string="", double=0.0, string="");
     ~Fine();
     string getFineID();
     double getAmount();

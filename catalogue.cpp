@@ -34,4 +34,39 @@ void Catalogue::populate()
     VideoGame m8("VG00002", "Nintendogs", "Junji Morri", 2005, Condition::New, "Nintendo DS", Status::Available, "Pet-Raising Simulation", 9);
     VideoGame m9("VG00003", "Ratchett and Clank", "Brian Allgeier", 2002, Condition::Fine, "PlayStation 2", Status::Available, "Third-Person Shooter/Platformer", 8);
     VideoGame m10("VG00003", "Grand Theft Auto IV", "Leslie Benzies", 2008, Condition::Fine, "Windows", Status::Available, "Action/Adventure", 8);
+
+    addItem(b1);
+    addItem(b2);
+    addItem(b3);
+    addItem(b4);
+    addItem(b5);
+    addItem(b6);
+    addItem(b7);
+    addItem(b8);
+    addItem(b9);
+    addItem(b10);
+    addItem(m1);
+    addItem(m2);
+    addItem(m3);
+    addItem(m4);
+    addItem(m5);
+    addItem(m6);
+    addItem(m7);
+    addItem(m8);
+    addItem(m9);
+    addItem(m10);
 }
+
+
+void Catalogue::addItem(CatalogueItem& i)
+{
+    if(numItems < MAX_ARR){
+        catalogueArr[numItems] = i;
+    }else{
+        cout << "Catalogue Full" << endl;
+    }
+}
+
+
+
+

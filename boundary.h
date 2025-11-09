@@ -2,7 +2,7 @@
 #define BOUNDARY_H
 
 #include "defs.h"
-#include "patron.h"
+#include "user.h"
 #include "catalogue.h"
 
 class Boundary

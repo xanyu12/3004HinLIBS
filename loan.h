@@ -5,13 +5,18 @@
 
 class Loan{
 public:
-    Loan();
+    Loan(string="", Date=Date(), Date=Date(), double=0.0);
     ~Loan();
+
+    string getLoanID();
+    Date getLoanDate();
+    Date getReturnDate();
+    double getFineIncurred();
+
 
 private:
     string loanID;
     Date loanDate;
-    Date dueDate;
     Date returnDate;
     double fineIncurred;
 

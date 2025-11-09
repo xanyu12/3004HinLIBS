@@ -23,7 +23,7 @@ public:
 private:
     string catalogueID;
     int numItems;
-    CatalogueItem collection[10];
+    CatalogueItem catalogueArr[MAX_ARR];
 };
 
 #endif // CATALOGUE_H
