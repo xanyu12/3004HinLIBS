@@ -48,6 +48,11 @@ string CatalogueItem::getFormat(){
     return format_;
 }
 
+string CatalogueItem::translateStatus(){
+
+}
+
+
 Status CatalogueItem::getCirculationStatus(){
     return circulationStatus_;
 }
@@ -61,7 +66,7 @@ void CatalogueItem::checkIn(){
 }
 
 void CatalogueItem::checkOut(){
-    circulationStatus_ = Status::Available;
+    circulationStatus_ = Status::Unavailable;
 
 }
 

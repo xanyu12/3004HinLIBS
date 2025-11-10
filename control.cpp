@@ -7,6 +7,11 @@ Control::Control(Boundary* b, Library* l){
 
 void Control::searchCatalogue(){
     string s = ui->getSearchInput();
+    if(s.empty()){
+        ui->displayError("No Title Entered");
+        return;
+    }
+
     CatalogueItem* search = library_->searchCatalogue(s);
     ui->displaySearch(*search);
 }

@@ -6,6 +6,8 @@ User::User(string i, string n, string c){
     contact = c;
 }
 
+User::~User(){}
+
 string User::getUserID(){
     return userID;
 }

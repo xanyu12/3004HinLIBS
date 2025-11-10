@@ -13,6 +13,7 @@ public:
     void browse();
     void populate();
     CatalogueItem* search(string& s);
+    CatalogueItem* getItem(int i);
     void addItem(CatalogueItem& i);
 
     string getID();

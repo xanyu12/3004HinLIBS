@@ -5,7 +5,7 @@
 
 class Hold{
 public:
-    Hold(string id);
+    Hold(string id="");
 
     string getHoldID();
 
