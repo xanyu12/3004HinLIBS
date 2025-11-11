@@ -48,8 +48,30 @@ string CatalogueItem::getFormat(){
     return format_;
 }
 
-string CatalogueItem::translateStatus(){
+string CatalogueItem::translateStatus(Status s){
+    switch(s){
+    case Status::Available:
+        return "Available";
+    case Status::Unavailable:
+        return "Unavailable";
+    case Status::Missing:
+        return "Missing";
+    case Status::Withdrawn:
+        return "Withdrawn";
+    }
+}
 
+string CatalogueItem::translateCondition(Condition c){
+    switch(c){
+    case Condition::Acceptable:
+        return "Acceptable";
+    case Condition::Fine:
+        return "Fine";
+    case Condition::New:
+        return "New";
+    case Condition::Poor:
+        return "Poor";
+    }
 }
 
 

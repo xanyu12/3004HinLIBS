@@ -31,6 +31,15 @@ public:
     void displaySearch(CatalogueItem& i);
     void displayCheckOut(CatalogueItem& item);
     void displayCheckIn(CatalogueItem& item);
+
+    void showStartPage();
+    void showAdminLogin();
+    void showPatronLogin();
+    void showLibrarianLogin();
+    void showPatronHomePage();
+    void showPatronCataloguePage();
+    void showPatronAccountPage();
+
 private:
     Ui::MainWindow* ui;
 };

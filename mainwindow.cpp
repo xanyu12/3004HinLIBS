@@ -27,7 +27,19 @@ void MainWindow::on_searchButton_clicked(){
         controller->searchCatalogue();
     }
 }
+void MainWindow::on_catalogueTable_rowClicked(int row, int col){
+    if(!controller){
+        return;
+    }
 
+    string id = ui->CatalogueTable->item(row, 0)->text();
+    controller->selectItem(id);
+}
+
+void MainWindow::on_adminButton_clicked()
+{
+    controller->handleAdminStart();
+}
 
 
 

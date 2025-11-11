@@ -5,10 +5,17 @@ Control::Control(Boundary* b, Library* l){
     library_ = l;
 }
 
+void Control::selectItem(string& s){
+    CatalogueItem* item = library_->searchCatalogue(s);
+    if(item){
+        return;
+    }
+}
+
 void Control::searchCatalogue(){
     string s = ui->getSearchInput();
     if(s.empty()){
-        ui->displayError("No Title Entered");
+        ui->displayError(s);
         return;
     }
 
@@ -46,4 +53,18 @@ void Control::loadLibrary(){
     library_->populateUsers();
 }
 
-void Control::runSystem(){}
+void Control::runSystem(){
+    ui->showStartPage();
+}
+
+void Control::handleAdminStart(){
+    ui->showAdminLogin();
+}
+
+void Control::handlePatronStart(){
+    ui->showPatronLogin();
+}
+
+void Control::handleLibrarianStart(){
+    ui->showLibrarianLogin();
+}

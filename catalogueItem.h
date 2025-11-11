@@ -22,8 +22,8 @@ public:
     Status getCirculationStatus();
     int getQueueSize();
 
-    string translateStatus();
-    string translateCondition();
+    string translateStatus(Status s);
+    string translateCondition(Condition c);
 
     void removeFromQueue(Hold& h);
     void addToQueue(Hold& h);

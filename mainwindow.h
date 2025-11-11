@@ -21,6 +21,9 @@ public:
 
 private slots:
     void on_searchButton_clicked();
+    void on_catalogueTable_rowClicked(int row, int column);
+
+    void on_adminButton_clicked();
 
 private:
     Ui::MainWindow *ui;
