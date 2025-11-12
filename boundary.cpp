@@ -45,18 +45,6 @@ string Boundary::getSearchInput()
     return text.toStdString();
 }
 
-int Boundary::getMode(){
-    if(ui->checkOutMode->isChecked()){
-        return 0;
-    }else{
-        return 1;
-    }
-}
-
-//CatalogueItem Boundary::getCatalogueItem(){}
-//Patron Boundary::getPatron(){}
-//Hold Boundary::getHold(){}
-
 void Boundary::displayCatalogue(Catalogue& c){
     ui->CatalogueTable->setRowCount(c.getNumItems());
     int row = 1;
@@ -68,12 +56,36 @@ void Boundary::displayCatalogue(Catalogue& c){
         ui->CatalogueTable->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(curr->translateStatus(curr->getCirculationStatus()))));
         ++row;
     }
-    ui->CatalogueTable->resizeColumnToContents(0);
+    ui->CatalogueTable->resizeColumnsToContents();
     ui->CatalogueTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
-//void Boundary::displayItem(CatalogueItem& i){}
-//void Boundary::displayError(string& e){}
-//void Boundary::displaySearch(CatalogueItem& i){}
-//void Boundary::displayCheckOut(CatalogueItem& item){}
-//void Boundary::displayCheckIn(CatalogueItem& item){}
+void Boundary::displayLoans(Patron &p){
+    ui->patronLoanTable->setRowCount(p.getNumLoans());
+    int row = 1;
+    for(int i = 0; i < p.getNumLoans(); ++i){
+        Loan* thisLoan = p.getLoanByIdx(i);
+        CatalogueItem* curr = thisLoan->getItem();
+        QDate today = QDate::currentDate();
+        Date d(today.day(), today.month(), today.year());
+        Date due = thisLoan->getLoanDate() + 14;
+        ui->patronLoanTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(curr->getTitle())));
+        ui->patronLoanTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(due.toString())));
+        ui->patronLoanTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(to_string(due-d))));
+    }
+     ui->patronLoanTable->resizeColumnsToContents();
+     ui->patronLoanTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+void Boundary::displayHolds(Patron &p){
+    ui->patronHoldTable->setRowCount(p.getNumHolds());
+    int row = 1;
+    for(int i = 0; i < p.getNumHolds(); ++i){
+        Hold* thisHold = p.getHoldByIdx(i);
+        ui->patronHoldTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(thisHold->getItemTitle())));
+        ui->patronHoldTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(to_string(thisHold->getPosition()))));
+    }
+    ui->patronHoldTable->resizeColumnsToContents();
+    ui->patronHoldTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+

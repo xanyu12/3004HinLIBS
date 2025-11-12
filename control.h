@@ -11,9 +11,6 @@ public:
     Control(Boundary* b, Library* l);
 
     void runSystem();
-    void selectCatalogueItem(string& s);
-    void selectLoanItem(string& s);
-    void selectHoldItem(string& s);
 
     void handleAdminStart();
     void handlePatronStart();
@@ -26,9 +23,9 @@ public:
     void handleAdminLogin(string& username, string& password);
     void handleLibrarianLogin(string& username, string& password);
     void searchCatalogue();
-    void checkOutItem();
-    void checkInItem();
-    void placeHold();
+    void checkOutItem(string& s);
+    void checkInItem(string& s);
+    void placeHold(string& s);
     void cancelHold();
     void loadLibrary();
     void getCurrentDate();

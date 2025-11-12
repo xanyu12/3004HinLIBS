@@ -33,7 +33,30 @@ void MainWindow::on_catalogueTable_rowClicked(int row){
     }
     QString id = ui->CatalogueTable->item(row, 0)->text();
     string s = id.toStdString();
-    controller->selectCatalogueItem(s);
+    QMessageBox::StandardButton reply;
+    if(ui->checkOutMode->isChecked()){
+        reply = QMessageBox::question(
+                    this,
+                    "Confirm Checkout",
+                    "Are you sure you want to check out this item?",
+                    QMessageBox::Yes|QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            controller->checkOutItem(s);
+        }else{
+            QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
+        }
+    }else if(ui->placeHoldMode->isChecked()){
+        reply = QMessageBox::question(
+                    this,
+                    "Confirm Hold",
+                    "Are you sure you want to place a hold on this item?",
+                    QMessageBox::Yes|QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            controller->placeHold(s);
+        }else{
+            QMessageBox::information(this, "Cancelled", "Hold Cancelled");
+        }
+    }
 }
 
 void MainWindow::on_adminButton_clicked()

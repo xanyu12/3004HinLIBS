@@ -112,6 +112,7 @@ void CatalogueItem::removeFromQueue(Hold &h){
     if(idx != -1){
         for(int j = idx; j < queueSize - 1; ++j){
             holdQueue[j] = holdQueue[j+1];
+            holdQueue[j].updatePosition();
         }
         queueSize--;
     }

@@ -14,6 +14,7 @@ public:
     Date getReturnDate();
     double getFineIncurred();
 
+    void setItem(CatalogueItem& item);
     void setReturnDate(Date& d);
     void setFine(double f);
     CatalogueItem* getItem();

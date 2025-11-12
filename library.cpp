@@ -83,7 +83,7 @@ Date Library::getToday(){
 }
 
 void Library::checkInItem(CatalogueItem &i, Patron& p){
-    Loan* thisLoan = p.getLoan(i);
+    Loan* thisLoan = p.getLoanByItem(i);
     Date returnDay = getToday();
     Date loanDay = thisLoan->getLoanDate();
     double total = calculateFine(loanDay, returnDay);
@@ -101,20 +101,25 @@ void Library::checkOutItem(CatalogueItem &i, Patron& p){
     Date loanDay = getToday();
     string id = "L" + i.getID() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
     Loan newLoan(id, loanDay, 0, 0.0);
-    i.checkOut();
-    p.addLoan(newLoan);
+    newLoan.setItem(i);
+    bool a = p.addLoan(newLoan);
+    if(a){
+        i.checkOut();
+    }
 }
 
 void Library::createHold(CatalogueItem &i, Patron &p){
     string id = "H" + i.getID() + p.getUserID() + to_string(i.getQueueSize());
-    Hold h(id);
+    Hold h(id, i.getTitle(), p.getUserID(), i.getQueueSize());
     p.addHold(h);
     i.addToQueue(h);
 }
 
 void Library::cancelHold(CatalogueItem &i, Patron &p, Hold &h){
-    i.removeFromQueue(h);
-    p.removeHold(h);
+    bool a = p.removeHold(h);
+    if(a){
+        i.removeFromQueue(h);
+    }
 }
 
 Librarian* Library::findStaffByName(string &s){

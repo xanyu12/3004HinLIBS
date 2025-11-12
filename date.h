@@ -16,11 +16,12 @@ public:
 
     void setDate(int, int, int);
 
-    void print();
+    string toString();
 
     bool operator==(Date& other);
     bool operator<(Date& other);
     int operator-(Date& other);
+    Date operator+(int days);
 
 private:
     int year;

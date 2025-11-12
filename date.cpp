@@ -8,6 +8,10 @@ int Date::getDay(){return day;}
 int Date::getMonth(){return month;}
 int Date::getYear(){return year;}
 
+string Date::toString(){
+    string s = to_string(day) + "-" + getMonthStr(month) + "-" + to_string(year);
+    return s;
+}
 void Date::setDate(int d, int m, int y){
     year = ((y > 0)? y : 0);
     month = ((m > 0 && m <= 12)? m:0);
@@ -78,4 +82,22 @@ bool Date::operator<(Date& other){
 
 int Date::operator-(Date &other){
     return toDays() - other.toDays();
+}
+
+Date Date::operator+(int days){
+    int newDay = day + days;
+    int newMonth = month;
+    int newYear = year;
+
+    while(newDay > lastDayInMonth(newMonth, newYear)){
+          newDay -= lastDayInMonth(newMonth, newYear);
+          newMonth++;
+          if(newMonth > 12){
+              newMonth = 1;
+              newYear++;
+          }
+    }
+
+    Date d(newDay, newMonth, newYear);
+    return d;
 }

@@ -31,14 +31,16 @@ public:
     int getNumLoans();
     int getNumHolds();
 
-    void addLoan(Loan& l);
-    Loan* getLoan(CatalogueItem& c);
+    bool addLoan(Loan& l);
+    Loan* getLoanByIdx(int n);
+    Loan* getLoanByItem(CatalogueItem& c);
 
     void payFine(Fine& f);
     void addFine(Fine& f);
 
     void addHold(Hold& h);
-    void removeHold(Hold& h);
+    bool removeHold(Hold& h);
+    Hold* getHoldByIdx(int n);
 
 
  private:

@@ -27,6 +27,8 @@ public:
     int getMode();
 
     void displayCatalogue(Catalogue& c);
+    void displayLoans(Patron& p);
+    void displayHolds(Patron& p);
     void displayItem(CatalogueItem& i);
     void displayError(string& e);
     void displaySearch(CatalogueItem& i);

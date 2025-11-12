@@ -8,6 +8,10 @@ Loan::Loan(string i, Date l, Date r, double f){
 }
 Loan::~Loan(){}
 
+void Loan::setItem(CatalogueItem &i){
+    item = &i;
+}
+
 string Loan::getLoanID(){
     return loanID;
 }

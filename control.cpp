@@ -5,15 +5,16 @@ Control::Control(Boundary* b, Library* l){
     library_ = l;
 }
 
-void Control::selectCatalogueItem(string& s){
+void Control::checkOutItem(string &s){
     Patron pat = ui->getPatron();
     CatalogueItem* item = library_->findItem(s);
-    int mode = ui->getMode();
-    if(mode == 0){
-        library_->checkInItem(*item, pat);
-    }else if((mode == 1)){
-        library_->createHold(*item, pat);
-    }
+    library_->checkOutItem(*item, pat);
+}
+
+void Control::checkInItem(string &s){
+    Patron pat = ui->getPatron();
+    CatalogueItem* item = library_->findItem(s);
+    library_->checkInItem(*item, pat);
 }
 
 void Control::searchCatalogue(){
@@ -27,10 +28,10 @@ void Control::searchCatalogue(){
 }
 
 
-void Control::placeHold(){
-    CatalogueItem item = ui->getCatalogueItem();
+void Control::placeHold(string& s){
+    CatalogueItem* item = library_->findItem(s);
     Patron pat = ui->getPatron();
-    library_->createHold(item, pat);
+    library_->createHold(*item, pat);
 }
 
 void Control::cancelHold(){

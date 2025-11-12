@@ -35,12 +35,14 @@ int Patron::getNumLoans(){
     return numLoans;
 }
 
-void Patron::addLoan(Loan &l){
+bool Patron::addLoan(Loan &l){
     if(numLoans < MAX_LOANS){
         loanArr[numLoans] = l;
         numLoans++;
+        return true;
     }else{
         cout << "Maximum Loans" << endl;
+        return false;
     }
 }
 
@@ -62,11 +64,12 @@ void Patron::addHold(Hold &h){
     }
 }
 
-void Patron::removeHold(Hold &h){
+bool Patron::removeHold(Hold &h){
     int idx = -1;
     for(int i = 0; i < numHolds; ++i){
         if(holdArr[i].getHoldID() == h.getHoldID()){
             idx = i;
+            break;
         }
     }
 
@@ -75,14 +78,27 @@ void Patron::removeHold(Hold &h){
             holdArr[j] = holdArr[j+1];
         }
         numHolds--;
+        return true;
+    }else{
+        return false;
     }
+
 }
 
 void Patron::payFine(Fine &f){
     f.updateStatus();
 }
 
-Loan* Patron::getLoan(CatalogueItem &c){
+Loan* Patron::getLoanByIdx(int n){
+    return &loanArr[n];
+
+}
+
+Hold* Patron::getHoldByIdx(int n){
+    return &holdArr[n];
+}
+
+Loan* Patron::getLoanByItem(CatalogueItem &c){
     for(int i = 0; i < numLoans; ++i){
         if(loanArr[i].getItem()->getID() == c.getID()){
             return &loanArr[i];

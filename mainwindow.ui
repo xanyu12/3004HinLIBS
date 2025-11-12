@@ -28,7 +28,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>6</number>
       </property>
       <widget class="QWidget" name="StartPage">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -970,7 +970,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QTableWidget" name="tableWidget">
+                 <widget class="QTableWidget" name="patronLoanTable">
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>180</number>
                   </attribute>
@@ -1047,22 +1047,6 @@
                 </item>
                </layout>
               </item>
-              <item>
-               <widget class="QPushButton" name="adminButton_2">
-                <property name="font">
-                 <font>
-                  <family>Quicksand Medium</family>
-                  <pointsize>14</pointsize>
-                  <weight>75</weight>
-                  <italic>false</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Check In</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </item>
             <item>
@@ -1089,7 +1073,7 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QTableWidget" name="tableWidget_2">
+                 <widget class="QTableWidget" name="patronHoldTable">
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>280</number>
                   </attribute>
@@ -1143,22 +1127,6 @@
                  </widget>
                 </item>
                </layout>
-              </item>
-              <item>
-               <widget class="QPushButton" name="adminButton_3">
-                <property name="font">
-                 <font>
-                  <family>Quicksand Medium</family>
-                  <pointsize>14</pointsize>
-                  <weight>75</weight>
-                  <italic>false</italic>
-                  <bold>true</bold>
-                 </font>
-                </property>
-                <property name="text">
-                 <string>Cancel Hold</string>
-                </property>
-               </widget>
               </item>
              </layout>
             </item>
