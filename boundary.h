@@ -24,6 +24,7 @@ public:
     CatalogueItem getCatalogueItem();
     Patron getPatron();
     Hold getHold();
+    int getMode();
 
     void displayCatalogue(Catalogue& c);
     void displayItem(CatalogueItem& i);

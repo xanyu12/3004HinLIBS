@@ -21,7 +21,7 @@ public:
 
 private slots:
     void on_searchButton_clicked();
-    void on_catalogueTable_rowClicked(int row, int column);
+    void on_catalogueTable_rowClicked(int row);
 
     void on_adminButton_clicked();
 
@@ -30,6 +30,12 @@ private slots:
     void on_staffButton_clicked();
 
     void on_libLoginButton_clicked();
+
+    void on_browseButton_clicked();
+
+    void on_patronAccountButton_clicked();
+
+    void on_patronCheckOutButton_clicked();
 
 private:
     Ui::MainWindow *ui;

@@ -11,11 +11,17 @@ public:
     Control(Boundary* b, Library* l);
 
     void runSystem();
-    void selectItem(string& s);
+    void selectCatalogueItem(string& s);
+    void selectLoanItem(string& s);
+    void selectHoldItem(string& s);
 
     void handleAdminStart();
     void handlePatronStart();
     void handleLibrarianStart();
+    void handlePatronBrowse();
+    void handlePatronMyAccount();
+
+
     void handlePatronLogin(string& cardNum, string& pin);
     void handleAdminLogin(string& username, string& password);
     void handleLibrarianLogin(string& username, string& password);

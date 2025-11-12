@@ -27,13 +27,13 @@ void MainWindow::on_searchButton_clicked(){
         controller->searchCatalogue();
     }
 }
-void MainWindow::on_catalogueTable_rowClicked(int row, int col){
+void MainWindow::on_catalogueTable_rowClicked(int row){
     if(!controller){
         return;
     }
-
     QString id = ui->CatalogueTable->item(row, 0)->text();
-    controller->selectItem(id);
+    string s = id.toStdString();
+    controller->selectCatalogueItem(s);
 }
 
 void MainWindow::on_adminButton_clicked()
@@ -55,9 +55,22 @@ void MainWindow::on_staffButton_clicked()
 
 void MainWindow::on_libLoginButton_clicked()
 {
-    QString username = ui->userInput->text();
-    QString password = ui->passwordInput->text();
-    controller->handleLibrarianLogin(username.toStdString(), password.toStdString());
+    string username = ui->userInput->text().toStdString();
+    string password = ui->passwordInput->text().toStdString();
+    controller->handleLibrarianLogin(username, password);
 
 }
+
+
+void MainWindow::on_browseButton_clicked()
+{
+    controller->handlePatronBrowse();
+}
+
+
+void MainWindow::on_patronAccountButton_clicked()
+{
+    controller->handlePatronMyAccount();
+}
+
 

@@ -41,8 +41,16 @@ void Boundary::displayStaffLoginError(string& e){
 
 string Boundary::getSearchInput()
 {
-    QString text = ui->passwordInput->text();
+    QString text = ui->hintonTitle->text();
     return text.toStdString();
+}
+
+int Boundary::getMode(){
+    if(ui->checkOutMode->isChecked()){
+        return 0;
+    }else{
+        return 1;
+    }
 }
 
 //CatalogueItem Boundary::getCatalogueItem(){}

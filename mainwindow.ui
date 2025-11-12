@@ -28,7 +28,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>5</number>
       </property>
       <widget class="QWidget" name="StartPage">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -771,16 +771,34 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton">
+         <widget class="QRadioButton" name="checkOutMode">
+          <property name="font">
+           <font>
+            <family>Quicksand</family>
+            <pointsize>12</pointsize>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>Check Out</string>
+           <string>Check Out Mode</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_2">
+         <widget class="QRadioButton" name="placeHoldMode">
+          <property name="font">
+           <font>
+            <family>Quicksand</family>
+            <pointsize>12</pointsize>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
           <property name="text">
-           <string>Place Hold</string>
+           <string>Place Hold Mode</string>
           </property>
          </widget>
         </item>

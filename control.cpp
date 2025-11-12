@@ -5,10 +5,14 @@ Control::Control(Boundary* b, Library* l){
     library_ = l;
 }
 
-void Control::selectItem(string& s){
-    CatalogueItem* item = library_->searchCatalogue(s);
-    if(item){
-        return;
+void Control::selectCatalogueItem(string& s){
+    Patron pat = ui->getPatron();
+    CatalogueItem* item = library_->findItem(s);
+    int mode = ui->getMode();
+    if(mode == 0){
+        library_->checkInItem(*item, pat);
+    }else if((mode == 1)){
+        library_->createHold(*item, pat);
     }
 }
 
@@ -18,22 +22,10 @@ void Control::searchCatalogue(){
         ui->displayError(s);
         return;
     }
-
-    CatalogueItem* search = library_->searchCatalogue(s);
+    CatalogueItem* search = library_->findItem(s);
     ui->displaySearch(*search);
 }
 
-void Control::checkOutItem(){
-    CatalogueItem item = ui->getCatalogueItem();
-    Patron pat = ui->getPatron();
-    library_->checkOutItem(item, pat);
-}
-
-void Control::checkInItem(){
-    CatalogueItem item = ui->getCatalogueItem();
-    Patron pat = ui->getPatron();
-    library_->checkInItem(item, pat);
-}
 
 void Control::placeHold(){
     CatalogueItem item = ui->getCatalogueItem();
@@ -67,6 +59,14 @@ void Control::handlePatronStart(){
 
 void Control::handleLibrarianStart(){
     ui->showLibrarianLogin();
+}
+
+void Control::handlePatronBrowse(){
+    ui->showPatronCataloguePage();
+}
+
+void Control::handlePatronMyAccount(){
+    ui->showPatronAccountPage();
 }
 
 void Control::handleLibrarianLogin(string& username, string& password){
