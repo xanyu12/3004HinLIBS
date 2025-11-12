@@ -9,6 +9,7 @@
 #include <QString>
 #include <QTableWidget>
 #include <QMessageBox>
+#include <QDate>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {class MainWindow;}

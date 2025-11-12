@@ -9,11 +9,11 @@ Library::Library(){
 Library::~Library(){}
 
 void Library::populateUsers(){
-    Patron p1("julia74", "Julia Salvatore", "101000001", "1234", "julia1974@gmail.com", 0.0, true);
-    Patron p2("nominomi", "Naomi Carthen", "101000002", "2345", "ncarthen@gmail.com", 0.0, true);
-    Patron p3("pengting", "Elena Peng", "101000003", "3456", "elenap@gmail.com", 0.0, true);
-    Patron p4("nene1999", "Nene Leakes", "101000004", "4567", "laneithia@gmail.com", 0.0, true);
-    Patron p5("santana", "Bonnie Santana", "101000005", "5678", "bonbon@gmail.com", 0.0, true);
+    Patron p1("julia74", "Julia Salvatore","julia1974@gmail.com", "101000001", "1234", 0.0, true);
+    Patron p2("nominomi", "Naomi Carthen", "ncarthen@gmail.com", "101000002", "2345", 0.0, true);
+    Patron p3("pengting", "Elena Peng", "elenap@gmail.com", "101000003", "3456",  0.0, true);
+    Patron p4("nene1999", "Nene Leakes", "laneithia@gmail.com", "101000004", "4567", 0.0, true);
+    Patron p5("santana", "Bonnie Santana", "bonbon@gmail.com", "101000005", "5678",  0.0, true);
     Librarian p6("jojojoestar", "Jonathan Joestar", "jj@gmail.com", "pa55wd");
     Admin p7("bigmike", "Michael Scott", "mike.scott@gmail.com", "secret!");
 
@@ -26,14 +26,19 @@ void Library::populateUsers(){
     addStaff(p6);
 
     addAdmin(p7);
+
+    cout << "Populated Users" << endl;
 }
 
 void Library::loadCatalogue(){
     collection.populate();
+
+    cout << "Loaded Catalogue" << endl;
 }
 
 void Library::addUser(Patron& u){
   if(numUsers < MAX_ARR){
+      cout << "Adding User: " + u.getUserID()<< endl;
       users[numUsers] = u;
       numUsers++;
   }else{
@@ -43,6 +48,7 @@ void Library::addUser(Patron& u){
 
 void Library::addStaff(Librarian &l){
   if(numStaff < MAX_ARR){
+      cout << "Adding Staff: " + l.getUserID() << endl;
       staff[numStaff] = l;
       numStaff++;
   }else{
@@ -52,8 +58,9 @@ void Library::addStaff(Librarian &l){
 
 void Library::addAdmin(Admin &a){
   if(numAdmin < MAX_ARR){
+      cout << "Adding Admin: " + a.getUserID() << endl;
       admin[numAdmin] = a;
-      numStaff++;
+      numAdmin++;
   }else{
       cout << "Maximum Staff Reached" << endl;
   }
@@ -126,6 +133,7 @@ void Library::cancelHold(CatalogueItem &i, User &p){
 }
 
 Librarian* Library::findStaffByName(string &s){
+    cout << "Finding Staff: " + s << endl;
     for(int i = 0; i < numStaff; ++i){
         if(staff[i].getUserID() == s){
             return &staff[i];
@@ -135,6 +143,7 @@ Librarian* Library::findStaffByName(string &s){
 }
 
 Patron* Library::findUserByNum(string &n){
+    cout << "Finding User: " + n << endl;
     for(int i = 0; i < numUsers; ++i){
         if(users[i].getCardNum() == n){
             return &users[i];
@@ -144,6 +153,7 @@ Patron* Library::findUserByNum(string &n){
 }
 
 Admin* Library::findAdminByName(string &s){
+    cout << "Finding Admin: " + s << endl;
     for(int i = 0; i < numAdmin; ++i){
         if(admin[i].getUserID() == s){
             return &admin[i];

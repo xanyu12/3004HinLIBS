@@ -137,3 +137,102 @@ void MainWindow::on_patronHoldTable_cellClicked(int row, int column)
     }
  }
 
+
+void MainWindow::on_adminLoginButton_clicked()
+{
+    string username = ui->adminUserInput->text().toStdString();
+    string password = ui->adminPasswordInput->text().toStdString();
+    controller->handleAdminLogin(username, password);
+}
+
+
+void MainWindow::on_libLoginBackButton_clicked()
+{
+    controller->handleLogout();
+    ui->userInput->setText("");
+    ui->passwordInput->setText("");
+    ui->staffErrorLabel->setText("");
+}
+
+
+void MainWindow::on_adminLoginBackButton_clicked()
+{
+    controller->handleLogout();
+    ui->adminUserInput->setText("");
+    ui->adminPasswordInput->setText("");
+    ui->adminErrorLabel->setText("");
+}
+
+
+void MainWindow::on_patronBackButton_clicked()
+{
+    controller->handleLogout();
+    ui->patronCardInput->setText("");
+    ui->patronPinInput->setText("");
+    ui->patronErrorLabel->setText("");
+}
+
+
+void MainWindow::on_patronLoginButton_clicked()
+{
+    string card = ui->patronCardInput->text().toStdString();
+    string pin = ui->patronPinInput->text().toStdString();
+    controller->handlePatronLogin(card, pin);
+}
+
+
+void MainWindow::on_patronLogoutFromHomeButton_clicked()
+{
+    controller->handleLogout();
+    ui->patronCardInput->setText("");
+    ui->patronPinInput->setText("");
+    ui->patronErrorLabel->setText("");
+}
+
+
+void MainWindow::on_patronBackFromCatalogueButton_clicked()
+{
+    controller->handlePatronStart();
+}
+
+
+void MainWindow::on_patronLogoutFromCatalogueButton_clicked()
+{
+    controller->handleLogout();
+    ui->patronCardInput->setText("");
+    ui->patronPinInput->setText("");
+    ui->patronErrorLabel->setText("");
+}
+
+
+void MainWindow::on_patronBackFromAccountButton_clicked()
+{
+    controller->handlePatronStart();
+}
+
+
+void MainWindow::on_patronLogoutFromAccountButton_clicked()
+{
+    controller->handleLogout();
+    ui->patronCardInput->setText("");
+    ui->patronPinInput->setText("");
+}
+
+
+void MainWindow::on_staffFromHomeLogoutButton_clicked()
+{
+    controller->handleLogout();
+    ui->userInput->setText("");
+    ui->passwordInput->setText("");
+    ui->staffErrorLabel->setText("");
+}
+
+
+void MainWindow::on_adminFromHomeLogoutButton_clicked()
+{
+    controller->handleLogout();
+    ui->adminUserInput->setText("");
+    ui->adminPasswordInput->setText("");
+    ui->adminErrorLabel->setText("");
+}
+

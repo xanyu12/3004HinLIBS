@@ -35,6 +35,7 @@ void Control::loadLibrary(){
 }
 
 void Control::runSystem(){
+    loadLibrary();
     ui->showStartPage();
 }
 
@@ -55,13 +56,18 @@ void Control::handlePatronBrowse(){
 }
 
 void Control::handlePatronMyAccount(){
+    Patron p = user;
+    ui->displayHolds(p);
     ui->showPatronAccountPage();
 }
 
 void Control::handleLibrarianLogin(string& username, string& password){
+    cout << "Librarian Logging In" << endl;
+    cout << "Name: " + username << endl;
     Librarian* u = library_->findStaffByName(username);
     string err = "";
     if(u){
+         cout << "User Found" << endl;
         if(u->getPassword() == password){
             ui->showStaffHomePage();
             setUser(*u);
@@ -75,9 +81,12 @@ void Control::handleLibrarianLogin(string& username, string& password){
 }
 
 void Control::handleAdminLogin(string &username, string &password){
+    cout << "Admin Logging In" << endl;
+    cout << "Name: " + username << endl;
     Admin* admin = library_->findAdminByName(username);
     string err = "";
     if(admin){
+        cout << "User Found" << endl;
         if(admin->getPassword() == password){
             ui->showAdminHomePage();
             setUser(*admin);
@@ -90,11 +99,14 @@ void Control::handleAdminLogin(string &username, string &password){
     }
 }
 void Control::handlePatronLogin(string &cardNum, string &pin){
+    cout << "Patron Logging In" << endl;
+    cout << "Card: " + cardNum << endl;
     Patron* pat = library_->findUserByNum(cardNum);
     string err = "";
     if(pat){
+         cout << "User Found" << endl;
         if(pat->getPin() == pin){
-            ui->showStaffHomePage();
+            ui->showPatronHomePage();
             setUser(*pat);
         }else{
             err = "Password Incorrect";
@@ -103,4 +115,8 @@ void Control::handlePatronLogin(string &cardNum, string &pin){
         err = "Username Incorrect";
         ui->displayPatronLoginError(err);
     }
+}
+
+void Control::handleLogout(){
+    ui->showStartPage();
 }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>926</width>
-    <height>659</height>
+    <width>770</width>
+    <height>419</height>
    </rect>
   </property>
   <property name="font">
@@ -28,7 +28,7 @@
     <item>
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="currentIndex">
-       <number>6</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="StartPage">
        <layout class="QVBoxLayout" name="verticalLayout">
@@ -451,7 +451,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="patronPinInput"/>
+           <widget class="QLineEdit" name="patronCardInput"/>
           </item>
          </layout>
         </item>
@@ -477,7 +477,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QLineEdit" name="patronPasswordInput"/>
+           <widget class="QLineEdit" name="patronPinInput"/>
           </item>
          </layout>
         </item>
@@ -517,7 +517,20 @@
        </layout>
       </widget>
       <widget class="QWidget" name="PatronHomePage">
-       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <layout class="QVBoxLayout" name="verticalLayout_28">
+        <item>
+         <widget class="QPushButton" name="patronLogoutFromHomeButton">
+          <property name="font">
+           <font>
+            <family>Quicksand</family>
+            <italic>false</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Logout</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="hintonTitle_4">
           <property name="font">
@@ -547,7 +560,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Home</string>
+           <string>Patron Home</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -589,42 +602,80 @@
        </layout>
       </widget>
       <widget class="QWidget" name="PatronCataloguePage">
-       <layout class="QVBoxLayout" name="verticalLayout_7">
+       <layout class="QVBoxLayout" name="verticalLayout_27">
         <item>
-         <widget class="QLabel" name="hintonTitle_5">
-          <property name="font">
-           <font>
-            <family>Quicksand Light</family>
-            <pointsize>18</pointsize>
-            <italic>false</italic>
-           </font>
-          </property>
-          <property name="text">
-           <string>HintonVille Library System</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="staffloginLabel_5">
-          <property name="font">
-           <font>
-            <family>Quicksand Light</family>
-            <pointsize>15</pointsize>
-            <weight>75</weight>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Catalogue</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_20">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_26">
+            <item>
+             <widget class="QLabel" name="hintonTitle_5">
+              <property name="font">
+               <font>
+                <family>Quicksand Light</family>
+                <pointsize>18</pointsize>
+                <italic>false</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>HintonVille Library System</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="staffloginLabel_5">
+              <property name="font">
+               <font>
+                <family>Quicksand Light</family>
+                <pointsize>15</pointsize>
+                <weight>75</weight>
+                <italic>false</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Catalogue</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_13">
+            <item>
+             <widget class="QPushButton" name="patronBackFromCatalogueButton">
+              <property name="font">
+               <font>
+                <family>Quicksand</family>
+                <italic>false</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>Back</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="patronLogoutFromCatalogueButton">
+              <property name="font">
+               <font>
+                <family>Quicksand</family>
+                <italic>false</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>Logout</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
          <widget class="QLabel" name="patronCatalogueErrorLabel">
@@ -805,42 +856,80 @@
        </layout>
       </widget>
       <widget class="QWidget" name="PatronAccountPage">
-       <layout class="QVBoxLayout" name="verticalLayout_12">
+       <layout class="QVBoxLayout" name="verticalLayout_25">
         <item>
-         <widget class="QLabel" name="hintonTitle_6">
-          <property name="font">
-           <font>
-            <family>Quicksand Light</family>
-            <pointsize>18</pointsize>
-            <italic>false</italic>
-           </font>
-          </property>
-          <property name="text">
-           <string>HintonVille Library System</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="staffloginLabel_6">
-          <property name="font">
-           <font>
-            <family>Quicksand Light</family>
-            <pointsize>15</pointsize>
-            <weight>75</weight>
-            <italic>false</italic>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>My Account</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
+         <layout class="QHBoxLayout" name="horizontalLayout_19">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_24">
+            <item>
+             <widget class="QLabel" name="hintonTitle_6">
+              <property name="font">
+               <font>
+                <family>Quicksand Light</family>
+                <pointsize>18</pointsize>
+                <italic>false</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>HintonVille Library System</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="staffloginLabel_6">
+              <property name="font">
+               <font>
+                <family>Quicksand Light</family>
+                <pointsize>15</pointsize>
+                <weight>75</weight>
+                <italic>false</italic>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>My Account</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_12">
+            <item>
+             <widget class="QPushButton" name="patronBackFromAccountButton">
+              <property name="font">
+               <font>
+                <family>Quicksand</family>
+                <italic>false</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>Back</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="patronLogoutFromAccountButton">
+              <property name="font">
+               <font>
+                <family>Quicksand</family>
+                <italic>false</italic>
+               </font>
+              </property>
+              <property name="text">
+               <string>Logout</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -853,7 +942,7 @@
              <number>20</number>
             </property>
             <item>
-             <widget class="QLabel" name="usernameText">
+             <widget class="QLabel" name="patronUsernameText">
               <property name="font">
                <font>
                 <family>Quicksand</family>
@@ -868,7 +957,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="usernameText_3">
+             <widget class="QLabel" name="patronNameText">
               <property name="font">
                <font>
                 <family>Quicksand</family>
@@ -883,7 +972,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="usernameText_2">
+             <widget class="QLabel" name="patronContactText">
               <property name="font">
                <font>
                 <family>Quicksand</family>
@@ -898,7 +987,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="usernameText_4">
+             <widget class="QLabel" name="patronCardText">
               <property name="font">
                <font>
                 <family>Quicksand</family>
@@ -913,7 +1002,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="usernameText_6">
+             <widget class="QLabel" name="patronStatusText">
               <property name="font">
                <font>
                 <family>Quicksand</family>
@@ -928,7 +1017,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QLabel" name="usernameText_5">
+             <widget class="QLabel" name="patronBalanceText">
               <property name="font">
                <font>
                 <family>Quicksand</family>
@@ -971,12 +1060,18 @@
                 </item>
                 <item>
                  <widget class="QTableWidget" name="patronLoanTable">
+                  <property name="rowCount">
+                   <number>3</number>
+                  </property>
                   <attribute name="horizontalHeaderDefaultSectionSize">
                    <number>180</number>
                   </attribute>
                   <attribute name="horizontalHeaderStretchLastSection">
                    <bool>true</bool>
                   </attribute>
+                  <row/>
+                  <row/>
+                  <row/>
                   <column>
                    <property name="text">
                     <string>Title</string>
@@ -1136,18 +1231,112 @@
         </item>
        </layout>
       </widget>
-      <widget class="QWidget" name="StaffHomePage"/>
-      <widget class="QWidget" name="AdminHomePage"/>
-     </widget>
-    </item>
-    <item>
-     <widget class="QDateTimeEdit" name="dateTimeEdit">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="currentSection">
-       <enum>QDateTimeEdit::MonthSection</enum>
-      </property>
+      <widget class="QWidget" name="StaffHomePage">
+       <layout class="QVBoxLayout" name="verticalLayout_23">
+        <item>
+         <widget class="QPushButton" name="staffFromHomeLogoutButton">
+          <property name="font">
+           <font>
+            <family>Quicksand</family>
+            <italic>false</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Logout</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="hintonTitle_7">
+          <property name="font">
+           <font>
+            <family>Quicksand Light</family>
+            <pointsize>18</pointsize>
+            <italic>false</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>HintonVille Library System</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="staffloginLabel_7">
+          <property name="font">
+           <font>
+            <family>Quicksand Light</family>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Staff Home</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="AdminHomePage">
+       <layout class="QVBoxLayout" name="verticalLayout_22">
+        <item>
+         <widget class="QPushButton" name="adminFromHomeLogoutButton">
+          <property name="font">
+           <font>
+            <family>Quicksand</family>
+            <italic>false</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>Logout</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="hintonTitle_15">
+          <property name="font">
+           <font>
+            <family>Quicksand Light</family>
+            <pointsize>18</pointsize>
+            <italic>false</italic>
+           </font>
+          </property>
+          <property name="text">
+           <string>HintonVille Library System</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="staffloginLabel_15">
+          <property name="font">
+           <font>
+            <family>Quicksand Light</family>
+            <pointsize>15</pointsize>
+            <weight>75</weight>
+            <italic>false</italic>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Admin Home</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
    </layout>
@@ -1158,7 +1347,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>926</width>
+     <width>770</width>
      <height>22</height>
     </rect>
    </property>

@@ -18,6 +18,7 @@ public:
     void handleLibrarianStart();
     void handlePatronBrowse();
     void handlePatronMyAccount();
+    void handleLogout();
 
 
     void handlePatronLogin(string& cardNum, string& pin);

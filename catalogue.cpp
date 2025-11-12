@@ -61,6 +61,7 @@ void Catalogue::populate()
 void Catalogue::addItem(CatalogueItem& i)
 {
     if(numItems < MAX_ARR){
+        cout << "Adding Item: " + i.getTitle() << endl;
         catalogueArr[numItems] = i;
         numItems++;
     }else{

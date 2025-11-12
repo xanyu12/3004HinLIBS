@@ -38,6 +38,30 @@ private slots:
 
     void on_patronHoldTable_cellClicked(int row, int column);
 
+    void on_adminLoginButton_clicked();
+
+    void on_libLoginBackButton_clicked();
+
+    void on_adminLoginBackButton_clicked();
+
+    void on_patronBackButton_clicked();
+
+    void on_patronLoginButton_clicked();
+
+    void on_patronLogoutFromHomeButton_clicked();
+
+    void on_patronBackFromCatalogueButton_clicked();
+
+    void on_patronLogoutFromCatalogueButton_clicked();
+
+    void on_patronBackFromAccountButton_clicked();
+
+    void on_patronLogoutFromAccountButton_clicked();
+
+    void on_staffFromHomeLogoutButton_clicked();
+
+    void on_adminFromHomeLogoutButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Control* controller;
