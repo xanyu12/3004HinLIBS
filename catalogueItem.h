@@ -25,7 +25,7 @@ public:
     string translateStatus(Status s);
     string translateCondition(Condition c);
 
-    void removeFromQueue(Hold& h);
+    void removeFromQueue(string& s);
     void addToQueue(Hold& h);
 
 private:

@@ -13,6 +13,11 @@ public:
     ~User();
 
     string getUserID();
+    void addHold(Hold& h);
+    bool addLoan(Loan& l);
+    Loan* getLoanByItem(CatalogueItem& c);
+    void addFine(Fine& f);
+    bool removeHold(string& s);
 
 private:
     string userID;
@@ -39,7 +44,7 @@ public:
     void addFine(Fine& f);
 
     void addHold(Hold& h);
-    bool removeHold(Hold& h);
+    bool removeHold(string& s);
     Hold* getHoldByIdx(int n);
 
 
@@ -62,6 +67,7 @@ public:
     Librarian(string="", string="", string="", string="");
 
     string getPassword();
+    bool addLoan(User& u);
 
 private:
     string password;

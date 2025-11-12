@@ -21,19 +21,9 @@ public:
     Boundary(Ui::MainWindow* ui);
 
     string getSearchInput();
-    CatalogueItem getCatalogueItem();
-    Patron getPatron();
-    Hold getHold();
-    int getMode();
-
     void displayCatalogue(Catalogue& c);
     void displayLoans(Patron& p);
     void displayHolds(Patron& p);
-    void displayItem(CatalogueItem& i);
-    void displayError(string& e);
-    void displaySearch(CatalogueItem& i);
-    void displayCheckOut(CatalogueItem& item);
-    void displayCheckIn(CatalogueItem& item);
 
     void displayAdminLoginError(string& e);
     void displayStaffLoginError(string& e);

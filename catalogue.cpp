@@ -81,6 +81,10 @@ CatalogueItem* Catalogue::search(string& s){
     return nullptr;
 }
 
+int Catalogue::getNumItems(){
+    return numItems;
+}
+
 
 
 

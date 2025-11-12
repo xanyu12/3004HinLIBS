@@ -101,10 +101,10 @@ void CatalogueItem::addToQueue(Hold &h){
     }
 }
 
-void CatalogueItem::removeFromQueue(Hold &h){
+void CatalogueItem::removeFromQueue(string& h){
     int idx = -1;
     for(int i = 0; i < queueSize; ++i){
-        if(holdQueue[i].getHoldID() == h.getHoldID()){
+        if(holdQueue[i].getItemTitle() == h){
             idx = i;
         }
     }

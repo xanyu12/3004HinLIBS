@@ -22,10 +22,10 @@ class Library
     Admin* findAdminByName(string& s);
     Patron* findUserByNum(string& n);
 
-    void checkInItem(CatalogueItem& i, Patron& p);
-    void checkOutItem(CatalogueItem& i, Patron& p);
-    void createHold(CatalogueItem& i, Patron& p);
-    void cancelHold(CatalogueItem& i, Patron& p, Hold &h);
+    void checkInItem(CatalogueItem& i, User& p);
+    void checkOutItem(CatalogueItem& i, User& p);
+    void createHold(CatalogueItem& i, User& p);
+    void cancelHold(CatalogueItem& i, User& p);
 
     double calculateFine(Date& d1, Date& d2);
 

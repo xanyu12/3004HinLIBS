@@ -64,10 +64,10 @@ void Patron::addHold(Hold &h){
     }
 }
 
-bool Patron::removeHold(Hold &h){
+bool Patron::removeHold(string& s){
     int idx = -1;
     for(int i = 0; i < numHolds; ++i){
-        if(holdArr[i].getHoldID() == h.getHoldID()){
+        if(holdArr[i].getItemTitle() == s){
             idx = i;
             break;
         }

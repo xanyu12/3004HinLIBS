@@ -16,7 +16,6 @@ public:
     CatalogueItem* getItem(int i);
     void addItem(CatalogueItem& i);
 
-    string getID();
     int getNumItems();
 
 private:

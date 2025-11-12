@@ -82,7 +82,7 @@ Date Library::getToday(){
     return today;
 }
 
-void Library::checkInItem(CatalogueItem &i, Patron& p){
+void Library::checkInItem(CatalogueItem &i, User& p){
     Loan* thisLoan = p.getLoanByItem(i);
     Date returnDay = getToday();
     Date loanDay = thisLoan->getLoanDate();
@@ -97,7 +97,7 @@ void Library::checkInItem(CatalogueItem &i, Patron& p){
     i.checkIn();
 }
 
-void Library::checkOutItem(CatalogueItem &i, Patron& p){
+void Library::checkOutItem(CatalogueItem &i, User& p){
     Date loanDay = getToday();
     string id = "L" + i.getID() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
     Loan newLoan(id, loanDay, 0, 0.0);
@@ -108,17 +108,18 @@ void Library::checkOutItem(CatalogueItem &i, Patron& p){
     }
 }
 
-void Library::createHold(CatalogueItem &i, Patron &p){
+void Library::createHold(CatalogueItem &i, User &p){
     string id = "H" + i.getID() + p.getUserID() + to_string(i.getQueueSize());
     Hold h(id, i.getTitle(), p.getUserID(), i.getQueueSize());
     p.addHold(h);
     i.addToQueue(h);
 }
 
-void Library::cancelHold(CatalogueItem &i, Patron &p, Hold &h){
-    bool a = p.removeHold(h);
+void Library::cancelHold(CatalogueItem &i, User &p){
+    string t = i.getTitle();
+    bool a = p.removeHold(t);
     if(a){
-        i.removeFromQueue(h);
+        i.removeFromQueue(t);
     }
 }
 

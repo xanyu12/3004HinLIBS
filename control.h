@@ -11,6 +11,7 @@ public:
     Control(Boundary* b, Library* l);
 
     void runSystem();
+    void setUser(User& u);
 
     void handleAdminStart();
     void handlePatronStart();
@@ -22,11 +23,10 @@ public:
     void handlePatronLogin(string& cardNum, string& pin);
     void handleAdminLogin(string& username, string& password);
     void handleLibrarianLogin(string& username, string& password);
-    void searchCatalogue();
     void checkOutItem(string& s);
     void checkInItem(string& s);
     void placeHold(string& s);
-    void cancelHold();
+    void cancelHold(string& s);
     void loadLibrary();
     void getCurrentDate();
 
@@ -34,6 +34,7 @@ public:
 private:
     Boundary* ui;
     Library* library_;
+    User* user;
 
 };
 

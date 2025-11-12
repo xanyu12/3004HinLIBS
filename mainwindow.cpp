@@ -20,14 +20,10 @@ Ui::MainWindow* MainWindow::getUI(){
 
 void MainWindow::setControl(Control *c){
     controller = c;
+    c->runSystem();
 }
 
-void MainWindow::on_searchButton_clicked(){
-    if(controller){
-        controller->searchCatalogue();
-    }
-}
-void MainWindow::on_catalogueTable_rowClicked(int row){
+void MainWindow::on_catalogueTable_rowClicked(int row, int col){
     if(!controller){
         return;
     }
@@ -96,4 +92,48 @@ void MainWindow::on_patronAccountButton_clicked()
     controller->handlePatronMyAccount();
 }
 
+
+
+void MainWindow::on_patronLoanTable_cellClicked(int row, int column)
+{
+    if(!controller){
+        return;
+    }
+    QString id = ui->patronLoanTable->item(row, 0)->text();
+    string s = id.toStdString();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm Checkout",
+                "Are you sure you want to check in this item?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        controller->checkInItem(s);
+    }else{
+        QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
+
+    }
+}
+
+
+void MainWindow::on_patronHoldTable_cellClicked(int row, int column)
+{
+    if(!controller){
+        return;
+    }
+    QString id = ui->patronHoldTable->item(row, 0)->text();
+    string s = id.toStdString();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm Checkout",
+                "Are you sure you want to check in this item?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        controller->cancelHold(s);
+    }else{
+        QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
+
+    }
+ }
 

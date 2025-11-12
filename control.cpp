@@ -5,40 +5,28 @@ Control::Control(Boundary* b, Library* l){
     library_ = l;
 }
 
+void Control::setUser(User& u){
+    user = &u;
+}
 void Control::checkOutItem(string &s){
-    Patron pat = ui->getPatron();
     CatalogueItem* item = library_->findItem(s);
-    library_->checkOutItem(*item, pat);
+    library_->checkOutItem(*item, *user);
 }
 
 void Control::checkInItem(string &s){
-    Patron pat = ui->getPatron();
     CatalogueItem* item = library_->findItem(s);
-    library_->checkInItem(*item, pat);
-}
-
-void Control::searchCatalogue(){
-    string s = ui->getSearchInput();
-    if(s.empty()){
-        ui->displayError(s);
-        return;
-    }
-    CatalogueItem* search = library_->findItem(s);
-    ui->displaySearch(*search);
+    library_->checkInItem(*item, *user);
 }
 
 
 void Control::placeHold(string& s){
     CatalogueItem* item = library_->findItem(s);
-    Patron pat = ui->getPatron();
-    library_->createHold(*item, pat);
+    library_->createHold(*item, *user);
 }
 
-void Control::cancelHold(){
-    CatalogueItem item = ui->getCatalogueItem();
-    Patron pat = ui->getPatron();
-    Hold h = ui->getHold();
-    library_->cancelHold(item, pat, h);
+void Control::cancelHold(string& s){
+    CatalogueItem* item = library_->findItem(s);
+    library_->cancelHold(item, *user, h);
 }
 
 void Control::loadLibrary(){
@@ -71,11 +59,12 @@ void Control::handlePatronMyAccount(){
 }
 
 void Control::handleLibrarianLogin(string& username, string& password){
-    Librarian* user = library_->findStaffByName(username);
+    Librarian* u = library_->findStaffByName(username);
     string err = "";
-    if(user){
-        if(user->getPassword() == password){
+    if(u){
+        if(u->getPassword() == password){
             ui->showStaffHomePage();
+            setUser(*u);
         }else{
             err = "Password Incorrect";
             ui->displayStaffLoginError(err);
@@ -90,6 +79,9 @@ void Control::handleAdminLogin(string &username, string &password){
     string err = "";
     if(admin){
         if(admin->getPassword() == password){
+            ui->showAdminHomePage();
+            setUser(*admin);
+        }else{
             err = "Password Incorrect";
             ui->displayAdminLoginError(err);
         }
@@ -102,6 +94,9 @@ void Control::handlePatronLogin(string &cardNum, string &pin){
     string err = "";
     if(pat){
         if(pat->getPin() == pin){
+            ui->showStaffHomePage();
+            setUser(*pat);
+        }else{
             err = "Password Incorrect";
             ui->displayPatronLoginError(err);
         }
