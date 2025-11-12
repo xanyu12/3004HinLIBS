@@ -12,6 +12,12 @@ string User::getUserID(){
     return userID;
 }
 
+void User::addHold(Hold& h){return;}
+bool User::addLoan(Loan& l){return false;}
+Loan* User::getLoanByItem(CatalogueItem& c){return nullptr;}
+void User::addFine(Fine& f){return;}
+bool User::removeHold(string& s){return false;}
+
 Patron::Patron(string i, string n, string c, string l, string p, double b, bool s)
     : User(i, n, c), libCardNum(l), pin(p), accountBalance(b), accountStatus(s){
     numFines = 0;
@@ -33,6 +39,10 @@ double Patron::getAccountBalance(){
 
 int Patron::getNumLoans(){
     return numLoans;
+}
+
+int Patron::getNumHolds(){
+    return numHolds;
 }
 
 bool Patron::addLoan(Loan &l){

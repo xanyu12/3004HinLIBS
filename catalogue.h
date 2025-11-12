@@ -10,7 +10,6 @@ public:
     Catalogue();
     ~Catalogue();
 
-    void browse();
     void populate();
     CatalogueItem* search(string& s);
     CatalogueItem* getItem(int i);

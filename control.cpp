@@ -26,7 +26,7 @@ void Control::placeHold(string& s){
 
 void Control::cancelHold(string& s){
     CatalogueItem* item = library_->findItem(s);
-    library_->cancelHold(item, *user, h);
+    library_->cancelHold(*item, *user);
 }
 
 void Control::loadLibrary(){

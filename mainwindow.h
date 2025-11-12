@@ -20,8 +20,7 @@ public:
     void setControl(Control* c);
 
 private slots:
-    void on_searchButton_clicked();
-    void on_catalogueTable_rowClicked(int row, int column);
+    void on_catalogueTable_cellClicked(int row, int column);
 
     void on_adminButton_clicked();
 
@@ -34,8 +33,6 @@ private slots:
     void on_browseButton_clicked();
 
     void on_patronAccountButton_clicked();
-
-    void on_patronCheckOutButton_clicked();
 
     void on_patronLoanTable_cellClicked(int row, int column);
 

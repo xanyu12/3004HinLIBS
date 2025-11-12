@@ -28,8 +28,6 @@ public:
     void placeHold(string& s);
     void cancelHold(string& s);
     void loadLibrary();
-    void getCurrentDate();
-
 
 private:
     Boundary* ui;

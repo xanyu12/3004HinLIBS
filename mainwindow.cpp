@@ -23,7 +23,7 @@ void MainWindow::setControl(Control *c){
     c->runSystem();
 }
 
-void MainWindow::on_catalogueTable_rowClicked(int row, int col){
+void MainWindow::on_catalogueTable_cellClicked(int row, int col){
     if(!controller){
         return;
     }

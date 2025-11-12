@@ -6,6 +6,8 @@ Library::Library(){
     numAdmin = 0;
 }
 
+Library::~Library(){}
+
 void Library::populateUsers(){
     Patron p1("julia74", "Julia Salvatore", "101000001", "1234", "julia1974@gmail.com", 0.0, true);
     Patron p2("nominomi", "Naomi Carthen", "101000002", "2345", "ncarthen@gmail.com", 0.0, true);
