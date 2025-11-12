@@ -23,6 +23,21 @@ void Boundary::showPatronCataloguePage(){
 void Boundary::showPatronAccountPage(){
     ui->stackedWidget->setCurrentIndex(6);
 }
+void Boundary::showStaffHomePage(){
+    ui->stackedWidget->setCurrentIndex(7);
+}
+void Boundary::showAdminHomePage(){
+    ui->stackedWidget->setCurrentIndex(8);
+}
+void Boundary::displayAdminLoginError(string& e){
+    ui->adminErrorLabel->setText(QString::fromStdString(e));
+}
+void Boundary::displayPatronLoginError(string& e){
+    ui->patronErrorLabel->setText(QString::fromStdString(e));
+}
+void Boundary::displayStaffLoginError(string& e){
+    ui->staffErrorLabel->setText(QString::fromStdString(e));
+}
 
 string Boundary::getSearchInput()
 {

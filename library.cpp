@@ -1,6 +1,10 @@
 #include "library.h"
 
-Library::Library(){numUsers = 0;}
+Library::Library(){
+    numUsers = 0;
+    numStaff = 0;
+    numAdmin = 0;
+}
 
 void Library::populateUsers(){
     Patron p1("julia74", "Julia Salvatore", "101000001", "1234", "julia1974@gmail.com", 0.0, true);
@@ -16,15 +20,17 @@ void Library::populateUsers(){
     addUser(p3);
     addUser(p4);
     addUser(p5);
-    addUser(p6);
-    addUser(p7);
+
+    addStaff(p6);
+
+    addAdmin(p7);
 }
 
 void Library::loadCatalogue(){
     collection.populate();
 }
 
-void Library::addUser(User& u){
+void Library::addUser(Patron& u){
   if(numUsers < MAX_ARR){
       users[numUsers] = u;
       numUsers++;
@@ -33,7 +39,26 @@ void Library::addUser(User& u){
   }
 }
 
-CatalogueItem* Library::searchCatalogue(string &s){
+void Library::addStaff(Librarian &l){
+  if(numStaff < MAX_ARR){
+      staff[numStaff] = l;
+      numStaff++;
+  }else{
+      cout << "Maximum Staff Reached" << endl;
+  }
+}
+
+void Library::addAdmin(Admin &a){
+  if(numAdmin < MAX_ARR){
+      admin[numAdmin] = a;
+      numStaff++;
+  }else{
+      cout << "Maximum Staff Reached" << endl;
+  }
+}
+
+
+CatalogueItem* Library::findItem(string &s){
     return collection.search(s);
 }
 
@@ -92,4 +117,30 @@ void Library::cancelHold(CatalogueItem &i, Patron &p, Hold &h){
     p.removeHold(h);
 }
 
+Librarian* Library::findStaffByName(string &s){
+    for(int i = 0; i < numStaff; ++i){
+        if(staff[i].getUserID() == s){
+            return &staff[i];
+        }
+    }
+    return nullptr;
+}
+
+Patron* Library::findUserByNum(string &n){
+    for(int i = 0; i < numUsers; ++i){
+        if(users[i].getCardNum() == n){
+            return &users[i];
+        }
+    }
+    return nullptr;
+}
+
+Admin* Library::findAdminByName(string &s){
+    for(int i = 0; i < numAdmin; ++i){
+        if(admin[i].getUserID() == s){
+            return &admin[i];
+        }
+    }
+    return nullptr;
+}
 

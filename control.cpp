@@ -68,3 +68,43 @@ void Control::handlePatronStart(){
 void Control::handleLibrarianStart(){
     ui->showLibrarianLogin();
 }
+
+void Control::handleLibrarianLogin(string& username, string& password){
+    Librarian* user = library_->findStaffByName(username);
+    string err = "";
+    if(user){
+        if(user->getPassword() == password){
+            ui->showStaffHomePage();
+        }else{
+            err = "Password Incorrect";
+            ui->displayStaffLoginError(err);
+        }
+        err = "Username Incorrect";
+        ui->displayStaffLoginError(err);
+    }
+}
+
+void Control::handleAdminLogin(string &username, string &password){
+    Admin* admin = library_->findAdminByName(username);
+    string err = "";
+    if(admin){
+        if(admin->getPassword() == password){
+            err = "Password Incorrect";
+            ui->displayAdminLoginError(err);
+        }
+        err = "Username Incorrect";
+        ui->displayAdminLoginError(err);
+    }
+}
+void Control::handlePatronLogin(string &cardNum, string &pin){
+    Patron* pat = library_->findUserByNum(cardNum);
+    string err = "";
+    if(pat){
+        if(pat->getPin() == pin){
+            err = "Password Incorrect";
+            ui->displayPatronLoginError(err);
+        }
+        err = "Username Incorrect";
+        ui->displayPatronLoginError(err);
+    }
+}

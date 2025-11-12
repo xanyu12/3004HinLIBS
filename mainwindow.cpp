@@ -32,7 +32,7 @@ void MainWindow::on_catalogueTable_rowClicked(int row, int col){
         return;
     }
 
-    string id = ui->CatalogueTable->item(row, 0)->text();
+    QString id = ui->CatalogueTable->item(row, 0)->text();
     controller->selectItem(id);
 }
 
@@ -41,5 +41,23 @@ void MainWindow::on_adminButton_clicked()
     controller->handleAdminStart();
 }
 
+void MainWindow::on_patronButton_clicked()
+{
+    controller->handlePatronStart();
+}
 
+
+void MainWindow::on_staffButton_clicked()
+{
+    controller->handleLibrarianStart();
+}
+
+
+void MainWindow::on_libLoginButton_clicked()
+{
+    QString username = ui->userInput->text();
+    QString password = ui->passwordInput->text();
+    controller->handleLibrarianLogin(username.toStdString(), password.toStdString());
+
+}
 

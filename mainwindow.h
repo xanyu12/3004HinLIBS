@@ -25,6 +25,12 @@ private slots:
 
     void on_adminButton_clicked();
 
+    void on_patronButton_clicked();
+
+    void on_staffButton_clicked();
+
+    void on_libLoginButton_clicked();
+
 private:
     Ui::MainWindow *ui;
     Control* controller;

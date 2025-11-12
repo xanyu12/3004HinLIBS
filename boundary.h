@@ -32,6 +32,10 @@ public:
     void displayCheckOut(CatalogueItem& item);
     void displayCheckIn(CatalogueItem& item);
 
+    void displayAdminLoginError(string& e);
+    void displayStaffLoginError(string& e);
+    void displayPatronLoginError(string& e);
+
     void showStartPage();
     void showAdminLogin();
     void showPatronLogin();
@@ -39,6 +43,8 @@ public:
     void showPatronHomePage();
     void showPatronCataloguePage();
     void showPatronAccountPage();
+    void showStaffHomePage();
+    void showAdminHomePage();
 
 private:
     Ui::MainWindow* ui;

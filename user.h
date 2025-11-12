@@ -22,7 +22,7 @@ private:
 
 class Patron : public User{
 public:
-    Patron(string i, string n, string c, string l, string p, double b, bool s);
+    Patron(string="", string="", string="", string="", string="", double=0.0, bool="");
 
     string getCardNum();
     string getPin();
@@ -57,7 +57,7 @@ public:
 
 class Librarian : public User{
 public:
-    Librarian(string i, string n, string c, string p);
+    Librarian(string="", string="", string="", string="");
 
     string getPassword();
 
@@ -67,7 +67,7 @@ private:
 
 class Admin : public User{
 public:
-    Admin(string i, string n, string c, string p);
+    Admin(string="", string="", string="", string="");
 
     string getPassword();
 private:

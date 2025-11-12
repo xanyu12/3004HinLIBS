@@ -12,10 +12,16 @@ class Library
     ~Library();
 
     void populateUsers();
-    void addUser(User& u);
+    void addUser(Patron& p);
+    void addStaff(Librarian& l);
+    void addAdmin(Admin& a);
     void loadCatalogue();
 
-    CatalogueItem* searchCatalogue(string& s);
+    CatalogueItem* findItem(string& s);
+    Librarian* findStaffByName(string& s);
+    Admin* findAdminByName(string& s);
+    Patron* findUserByNum(string& n);
+
     void checkInItem(CatalogueItem& i, Patron& p);
     void checkOutItem(CatalogueItem& i, Patron& p);
     void createHold(CatalogueItem& i, Patron& p);
@@ -24,12 +30,19 @@ class Library
     double calculateFine(Date& d1, Date& d2);
 
     int getNumUsers();
+    int getNumStaff();
+    int getNumAdmin();
+
     Date getToday();
 
 private:
     Catalogue collection;
-    User users[MAX_ARR];
     int numUsers;
+    int numStaff;
+    int numAdmin;
+    Patron users[MAX_ARR];
+    Librarian staff[MAX_ARR];
+    Admin admin[MAX_ARR];
 
 };
 
