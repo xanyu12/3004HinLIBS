@@ -12,6 +12,22 @@ string User::getUserID(){
     return userID;
 }
 
+string User::getName(){
+    return name;
+}
+
+string User::getContact(){
+    return contact;
+}
+
+string Patron::getAccountStatus(){
+    if(accountStatus){
+        return "Active";
+    }else{
+        return "Locked";
+    }
+}
+
 void User::addHold(Hold& h){return;}
 bool User::addLoan(Loan& l){return false;}
 Loan* User::getLoanByItem(CatalogueItem& c){return nullptr;}
@@ -46,7 +62,9 @@ int Patron::getNumHolds(){
 }
 
 bool Patron::addLoan(Loan &l){
+    cout << "FCJEKBKWENFWNEKF" << endl;
     if(numLoans < MAX_LOANS){
+        cout << "Adding Loan" << endl;
         loanArr[numLoans] = l;
         numLoans++;
         return true;

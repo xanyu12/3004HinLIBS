@@ -20,8 +20,6 @@ public:
     void setControl(Control* c);
 
 private slots:
-    void on_catalogueTable_cellClicked(int row, int column);
-
     void on_adminButton_clicked();
 
     void on_patronButton_clicked();
@@ -61,6 +59,8 @@ private slots:
     void on_staffFromHomeLogoutButton_clicked();
 
     void on_adminFromHomeLogoutButton_clicked();
+
+    void on_CatalogueTable_cellDoubleClicked(int row, int column);
 
 private:
     Ui::MainWindow *ui;

@@ -13,6 +13,8 @@ public:
     ~User();
 
     string getUserID();
+    string getContact();
+    string getName();
     void addHold(Hold& h);
     bool addLoan(Loan& l);
     Loan* getLoanByItem(CatalogueItem& c);
@@ -32,6 +34,7 @@ public:
     string getCardNum();
     string getPin();
     double getAccountBalance();
+    string getAccountStatus();
 
     int getNumLoans();
     int getNumHolds();

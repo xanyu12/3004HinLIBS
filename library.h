@@ -21,17 +21,19 @@ class Library
     Librarian* findStaffByName(string& s);
     Admin* findAdminByName(string& s);
     Patron* findUserByNum(string& n);
+    Patron* findUserByName(string & s);
 
-    void checkInItem(CatalogueItem& i, User& p);
-    void checkOutItem(CatalogueItem& i, User& p);
-    void createHold(CatalogueItem& i, User& p);
-    void cancelHold(CatalogueItem& i, User& p);
+    bool checkInItem(CatalogueItem* i, User* p);
+    bool checkOutItem(CatalogueItem* i, User* p);
+    bool createHold(CatalogueItem* i, User* p);
+    bool cancelHold(CatalogueItem* i, User* p);
 
     double calculateFine(Date& d1, Date& d2);
 
     int getNumUsers();
     int getNumStaff();
     int getNumAdmin();
+    Catalogue getCatalogue();
 
     Date getToday();
 

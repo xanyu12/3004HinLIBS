@@ -74,11 +74,14 @@ CatalogueItem* Catalogue::getItem(int i){
 }
 
 CatalogueItem* Catalogue::search(string& s){
+    cout << "Finding Item: " + s << endl;
     for(int i = 0; i < numItems; ++i){
         if(catalogueArr[i].getTitle() == s){
+            cout << "Found It" << endl;
             return &catalogueArr[i];
         }
     }
+    cout << "Could Not Find" << endl;
     return nullptr;
 }
 

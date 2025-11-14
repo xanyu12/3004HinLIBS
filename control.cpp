@@ -3,30 +3,53 @@
 Control::Control(Boundary* b, Library* l){
     ui = b;
     library_ = l;
+    currentUser = nullptr;
 }
 
-void Control::setUser(User& u){
-    user = &u;
+void Control::setUser(User* u){
+    currentUser = u;
 }
-void Control::checkOutItem(string &s){
+bool Control::checkOutItem(string &s){
+    cout << "Checking Out: " + s << endl;
     CatalogueItem* item = library_->findItem(s);
-    library_->checkOutItem(*item, *user);
+    bool b = library_->checkOutItem(item, currentUser);
+    if(b == true){
+        cout << "DONE CHECKOUT" << endl;
+        return true;
+    }
+    cout << "FAILED CHECKOUT" << endl;
+    return false;
 }
 
-void Control::checkInItem(string &s){
+bool Control::checkInItem(string &s){
+    cout << "Checking In: " + s << endl;
     CatalogueItem* item = library_->findItem(s);
-    library_->checkInItem(*item, *user);
+    bool b = library_->checkInItem(item, currentUser);
+    if(b == true){
+        return true;
+    }
+    return false;
 }
 
 
-void Control::placeHold(string& s){
+bool Control::placeHold(string& s){
+    cout << "Placing Hold: " + s << endl;
     CatalogueItem* item = library_->findItem(s);
-    library_->createHold(*item, *user);
+    bool b = library_->createHold(item, currentUser);
+    if(b == true){
+        return true;
+    }
+    return false;
 }
 
-void Control::cancelHold(string& s){
+bool Control::cancelHold(string& s){
+    cout << "Cancelling Hold: " + s << endl;
     CatalogueItem* item = library_->findItem(s);
-    library_->cancelHold(*item, *user);
+    bool b = library_->cancelHold(item, currentUser);
+    if(b == true){
+        return true;
+    }
+    return false;
 }
 
 void Control::loadLibrary(){
@@ -37,6 +60,10 @@ void Control::loadLibrary(){
 void Control::runSystem(){
     loadLibrary();
     ui->showStartPage();
+}
+
+void Control::handlePatronHome(){
+    ui->showPatronHomePage();
 }
 
 void Control::handleAdminStart(){
@@ -52,12 +79,17 @@ void Control::handleLibrarianStart(){
 }
 
 void Control::handlePatronBrowse(){
+    Catalogue p = library_->getCatalogue();
+    ui->displayCatalogue(p);
     ui->showPatronCataloguePage();
 }
 
 void Control::handlePatronMyAccount(){
-    Patron p = user;
-    ui->displayHolds(p);
+    string s = currentUser->getUserID();
+    Patron* p = library_->findUserByName(s);
+    ui->displayHolds(*p);
+    ui->displayLoans(*p);
+    ui->displayAccount(*p);
     ui->showPatronAccountPage();
 }
 
@@ -70,7 +102,7 @@ void Control::handleLibrarianLogin(string& username, string& password){
          cout << "User Found" << endl;
         if(u->getPassword() == password){
             ui->showStaffHomePage();
-            setUser(*u);
+            setUser(u);
         }else{
             err = "Password Incorrect";
             ui->displayStaffLoginError(err);
@@ -89,7 +121,7 @@ void Control::handleAdminLogin(string &username, string &password){
         cout << "User Found" << endl;
         if(admin->getPassword() == password){
             ui->showAdminHomePage();
-            setUser(*admin);
+            setUser(admin);
         }else{
             err = "Password Incorrect";
             ui->displayAdminLoginError(err);
@@ -107,7 +139,7 @@ void Control::handlePatronLogin(string &cardNum, string &pin){
          cout << "User Found" << endl;
         if(pat->getPin() == pin){
             ui->showPatronHomePage();
-            setUser(*pat);
+            setUser(pat);
         }else{
             err = "Password Incorrect";
             ui->displayPatronLoginError(err);
@@ -118,5 +150,6 @@ void Control::handlePatronLogin(string &cardNum, string &pin){
 }
 
 void Control::handleLogout(){
+    setUser(nullptr);
     ui->showStartPage();
 }

@@ -23,37 +23,6 @@ void MainWindow::setControl(Control *c){
     c->runSystem();
 }
 
-void MainWindow::on_catalogueTable_cellClicked(int row, int col){
-    if(!controller){
-        return;
-    }
-    QString id = ui->CatalogueTable->item(row, 0)->text();
-    string s = id.toStdString();
-    QMessageBox::StandardButton reply;
-    if(ui->checkOutMode->isChecked()){
-        reply = QMessageBox::question(
-                    this,
-                    "Confirm Checkout",
-                    "Are you sure you want to check out this item?",
-                    QMessageBox::Yes|QMessageBox::No);
-        if(reply == QMessageBox::Yes){
-            controller->checkOutItem(s);
-        }else{
-            QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
-        }
-    }else if(ui->placeHoldMode->isChecked()){
-        reply = QMessageBox::question(
-                    this,
-                    "Confirm Hold",
-                    "Are you sure you want to place a hold on this item?",
-                    QMessageBox::Yes|QMessageBox::No);
-        if(reply == QMessageBox::Yes){
-            controller->placeHold(s);
-        }else{
-            QMessageBox::information(this, "Cancelled", "Hold Cancelled");
-        }
-    }
-}
 
 void MainWindow::on_adminButton_clicked()
 {
@@ -96,6 +65,7 @@ void MainWindow::on_patronAccountButton_clicked()
 
 void MainWindow::on_patronLoanTable_cellClicked(int row, int column)
 {
+    cout << "CLICK ONE" << endl;
     if(!controller){
         return;
     }
@@ -192,7 +162,7 @@ void MainWindow::on_patronLogoutFromHomeButton_clicked()
 
 void MainWindow::on_patronBackFromCatalogueButton_clicked()
 {
-    controller->handlePatronStart();
+    controller->handlePatronHome();
 }
 
 
@@ -207,7 +177,7 @@ void MainWindow::on_patronLogoutFromCatalogueButton_clicked()
 
 void MainWindow::on_patronBackFromAccountButton_clicked()
 {
-    controller->handlePatronStart();
+    controller->handlePatronHome();
 }
 
 
@@ -234,5 +204,39 @@ void MainWindow::on_adminFromHomeLogoutButton_clicked()
     ui->adminUserInput->setText("");
     ui->adminPasswordInput->setText("");
     ui->adminErrorLabel->setText("");
+}
+
+
+void MainWindow::on_CatalogueTable_cellDoubleClicked(int row, int column)
+{
+    QString id = ui->CatalogueTable->item(row, 0)->text();
+    cout << id.toStdString() << endl;
+
+    string s = id.toStdString();
+    QMessageBox::StandardButton reply;
+    if(ui->checkOutMode->isChecked()){
+        reply = QMessageBox::question(
+                    this,
+                    "Confirm Checkout",
+                    "Are you sure you want to check out this item?",
+                    QMessageBox::Yes|QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            controller->checkOutItem(s);
+            ui->CatalogueTable->item(row, 3)->setText("Unavailable");
+        }else{
+            QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
+        }
+    }else if(ui->placeHoldMode->isChecked()){
+        reply = QMessageBox::question(
+                    this,
+                    "Confirm Hold",
+                    "Are you sure you want to place a hold on this item?",
+                    QMessageBox::Yes|QMessageBox::No);
+        if(reply == QMessageBox::Yes){
+            controller->placeHold(s);
+        }else{
+            QMessageBox::information(this, "Cancelled", "Hold Cancelled");
+        }
+    }
 }
 

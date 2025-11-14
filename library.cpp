@@ -91,45 +91,60 @@ Date Library::getToday(){
     return today;
 }
 
-void Library::checkInItem(CatalogueItem &i, User& p){
-    Loan* thisLoan = p.getLoanByItem(i);
+bool Library::checkInItem(CatalogueItem* i, User* u){
+    string s = u->getUserID();
+    Patron* p = findUserByName(s);
+    Loan* thisLoan = p->getLoanByItem(*i);
     Date returnDay = getToday();
     Date loanDay = thisLoan->getLoanDate();
     double total = calculateFine(loanDay, returnDay);
     if(total > 0.00){
-        string id = "F" + i.getID() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+        string id = "F" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
         Fine f(id, total);
-        p.addFine(f);
+        p->addFine(f);
         thisLoan->setFine(total);
     }
     thisLoan->setReturnDate(returnDay);
-    i.checkIn();
+    i->checkIn();
+    return true;
 }
 
-void Library::checkOutItem(CatalogueItem &i, User& p){
-    Date loanDay = getToday();
-    string id = "L" + i.getID() + p.getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-    Loan newLoan(id, loanDay, 0, 0.0);
-    newLoan.setItem(i);
-    bool a = p.addLoan(newLoan);
-    if(a){
-        i.checkOut();
+bool Library::checkOutItem(CatalogueItem* i, User* u){
+    string s = u->getUserID();
+    Patron* p = findUserByName(s);
+    cout << "Checking out item: " + i->getTitle() + " for " + p->getUserID() << endl;
+    if(i->getCirculationStatus() == Status::Available && p->getAccountStatus() == "Active"){
+        cout << "Borrow Available" << endl;
+        Date loanDay = getToday();
+        string id = "L" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+        Loan newLoan(id, loanDay, 0, 0.0);
+        newLoan.setItem(i);
+        bool a = p->addLoan(newLoan);
+        if(a == true){
+            cout << "CHECKED OUT" << endl;
+            i->checkOut();
+        }
+        return true;
+    }else{
+        return false;
     }
 }
 
-void Library::createHold(CatalogueItem &i, User &p){
-    string id = "H" + i.getID() + p.getUserID() + to_string(i.getQueueSize());
-    Hold h(id, i.getTitle(), p.getUserID(), i.getQueueSize());
-    p.addHold(h);
-    i.addToQueue(h);
+bool Library::createHold(CatalogueItem* i, User* p){
+    string id = "H" + i->getID() + p->getUserID() + to_string(i->getQueueSize());
+    Hold h(id, i->getTitle(), p->getUserID(), i->getQueueSize());
+    p->addHold(h);
+    i->addToQueue(h);
+    return true;
 }
 
-void Library::cancelHold(CatalogueItem &i, User &p){
-    string t = i.getTitle();
-    bool a = p.removeHold(t);
+bool Library::cancelHold(CatalogueItem* i, User* p){
+    string t = i->getTitle();
+    bool a = p->removeHold(t);
     if(a){
-        i.removeFromQueue(t);
+        i->removeFromQueue(t);
     }
+    return true;
 }
 
 Librarian* Library::findStaffByName(string &s){
@@ -150,6 +165,20 @@ Patron* Library::findUserByNum(string &n){
         }
     }
     return nullptr;
+}
+
+Patron* Library::findUserByName(string &n){
+    cout << "Finding User: " + n << endl;
+    for(int i = 0; i < numUsers; ++i){
+        if(users[i].getUserID() == n){
+            return &users[i];
+        }
+    }
+    return nullptr;
+}
+
+Catalogue Library::getCatalogue(){
+    return collection;
 }
 
 Admin* Library::findAdminByName(string &s){

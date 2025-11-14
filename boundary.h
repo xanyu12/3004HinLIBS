@@ -25,6 +25,7 @@ public:
     void displayCatalogue(Catalogue& c);
     void displayLoans(Patron& p);
     void displayHolds(Patron& p);
+    void displayAccount(Patron& p);
 
     void displayAdminLoginError(string& e);
     void displayStaffLoginError(string& e);

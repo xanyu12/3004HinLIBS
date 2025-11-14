@@ -8,8 +8,9 @@ Loan::Loan(string i, Date l, Date r, double f){
 }
 Loan::~Loan(){}
 
-void Loan::setItem(CatalogueItem &i){
-    item = &i;
+void Loan::setItem(CatalogueItem* i){
+    cout << "NEW LOAN " + i->getTitle() << endl;
+    item = i;
 }
 
 string Loan::getLoanID(){
