@@ -123,6 +123,8 @@ bool Library::checkOutItem(CatalogueItem* i, User* u){
         if(a == true){
             cout << "CHECKED OUT" << endl;
             i->checkOut();
+        }else{
+            return false;
         }
         return true;
     }else{
@@ -130,19 +132,25 @@ bool Library::checkOutItem(CatalogueItem* i, User* u){
     }
 }
 
-bool Library::createHold(CatalogueItem* i, User* p){
+bool Library::createHold(CatalogueItem* i, User* u){
+    string s = u->getUserID();
+    Patron* p = findUserByName(s);
     string id = "H" + i->getID() + p->getUserID() + to_string(i->getQueueSize());
-    Hold h(id, i->getTitle(), p->getUserID(), i->getQueueSize());
+    Hold h(id, i->getTitle(), p->getUserID(), i->getQueueSize()+1);
     p->addHold(h);
     i->addToQueue(h);
     return true;
 }
 
-bool Library::cancelHold(CatalogueItem* i, User* p){
+bool Library::cancelHold(CatalogueItem* i, User* u){
+    string s = u->getUserID();
+    Patron* p = findUserByName(s);
     string t = i->getTitle();
     bool a = p->removeHold(t);
     if(a){
         i->removeFromQueue(t);
+    }else{
+        return false;
     }
     return true;
 }

@@ -32,9 +32,9 @@ private slots:
 
     void on_patronAccountButton_clicked();
 
-    void on_patronLoanTable_cellClicked(int row, int column);
+    void on_patronLoanTable_cellDoubleClicked(int row, int column);
 
-    void on_patronHoldTable_cellClicked(int row, int column);
+    void on_patronHoldTable_cellDoubleClicked(int row, int column);
 
     void on_adminLoginButton_clicked();
 

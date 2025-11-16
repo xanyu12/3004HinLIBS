@@ -15,6 +15,8 @@ bool Control::checkOutItem(string &s){
     bool b = library_->checkOutItem(item, currentUser);
     if(b == true){
         cout << "DONE CHECKOUT" << endl;
+        Catalogue cat = library_->getCatalogue();
+        ui->displayCatalogue(cat);
         return true;
     }
     cout << "FAILED CHECKOUT" << endl;
@@ -26,8 +28,10 @@ bool Control::checkInItem(string &s){
     CatalogueItem* item = library_->findItem(s);
     bool b = library_->checkInItem(item, currentUser);
     if(b == true){
+        cout << "DONE CHECK IN" << endl;
         return true;
     }
+    cout << "FAILED CHECK IN" << endl;
     return false;
 }
 
@@ -87,9 +91,9 @@ void Control::handlePatronBrowse(){
 void Control::handlePatronMyAccount(){
     string s = currentUser->getUserID();
     Patron* p = library_->findUserByName(s);
+    cout << "Current User: " + p->getName() << endl;
     ui->displayHolds(*p);
     ui->displayLoans(*p);
-    ui->displayAccount(*p);
     ui->showPatronAccountPage();
 }
 
@@ -138,6 +142,7 @@ void Control::handlePatronLogin(string &cardNum, string &pin){
     if(pat){
          cout << "User Found" << endl;
         if(pat->getPin() == pin){
+            ui->displayAccount(*pat);
             ui->showPatronHomePage();
             setUser(pat);
         }else{

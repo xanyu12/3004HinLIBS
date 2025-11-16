@@ -62,52 +62,6 @@ void MainWindow::on_patronAccountButton_clicked()
 }
 
 
-
-void MainWindow::on_patronLoanTable_cellClicked(int row, int column)
-{
-    cout << "CLICK ONE" << endl;
-    if(!controller){
-        return;
-    }
-    QString id = ui->patronLoanTable->item(row, 0)->text();
-    string s = id.toStdString();
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(
-                this,
-                "Confirm Checkout",
-                "Are you sure you want to check in this item?",
-                QMessageBox::Yes|QMessageBox::No);
-    if(reply == QMessageBox::Yes){
-        controller->checkInItem(s);
-    }else{
-        QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
-
-    }
-}
-
-
-void MainWindow::on_patronHoldTable_cellClicked(int row, int column)
-{
-    if(!controller){
-        return;
-    }
-    QString id = ui->patronHoldTable->item(row, 0)->text();
-    string s = id.toStdString();
-    QMessageBox::StandardButton reply;
-    reply = QMessageBox::question(
-                this,
-                "Confirm Checkout",
-                "Are you sure you want to check in this item?",
-                QMessageBox::Yes|QMessageBox::No);
-    if(reply == QMessageBox::Yes){
-        controller->cancelHold(s);
-    }else{
-        QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
-
-    }
- }
-
-
 void MainWindow::on_adminLoginButton_clicked()
 {
     string username = ui->adminUserInput->text().toStdString();
@@ -177,6 +131,8 @@ void MainWindow::on_patronLogoutFromCatalogueButton_clicked()
 
 void MainWindow::on_patronBackFromAccountButton_clicked()
 {
+     ui->patronHoldTable->clearContents();
+     ui->patronLoanTable->clearContents();
     controller->handlePatronHome();
 }
 
@@ -206,12 +162,58 @@ void MainWindow::on_adminFromHomeLogoutButton_clicked()
     ui->adminErrorLabel->setText("");
 }
 
+void MainWindow::on_patronLoanTable_cellDoubleClicked(int row, int column)
+{
+    if(!controller){
+        return;
+    }
+    QString id = ui->patronLoanTable->item(row, 0)->text();
+    string s = id.toStdString();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm Checkout",
+                "Are you sure you want to check in this item?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        controller->checkInItem(s);
+        QMessageBox::information(this, "CHECKIN SUCCESSFUL", id + " has been removed from your account. Thank you!");
+    }else{
+        QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
+
+    }
+}
+
+
+void MainWindow::on_patronHoldTable_cellDoubleClicked(int row, int column)
+{
+    if(!controller){
+        return;
+    }
+    QString id = ui->patronHoldTable->item(row, 0)->text();
+    string s = id.toStdString();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm Checkout",
+                "Are you sure you want to check in this item?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        controller->cancelHold(s);
+        ui->patronHoldTable->item(row, 0)->setText("");
+        ui->patronHoldTable->item(row, 1)->setText("");
+        QMessageBox::information(this, "CANCEL HOLD SUCCESSFUL", id + " has been removed from your account.");
+
+    }else{
+        QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
+
+    }
+ }
+
 
 void MainWindow::on_CatalogueTable_cellDoubleClicked(int row, int column)
 {
     QString id = ui->CatalogueTable->item(row, 0)->text();
-    cout << id.toStdString() << endl;
-
     string s = id.toStdString();
     QMessageBox::StandardButton reply;
     if(ui->checkOutMode->isChecked()){
@@ -221,8 +223,13 @@ void MainWindow::on_CatalogueTable_cellDoubleClicked(int row, int column)
                     "Are you sure you want to check out this item?",
                     QMessageBox::Yes|QMessageBox::No);
         if(reply == QMessageBox::Yes){
-            controller->checkOutItem(s);
-            ui->CatalogueTable->item(row, 3)->setText("Unavailable");
+            bool a  = controller->checkOutItem(s);
+            if(a == true){
+                QMessageBox::information(this, "CHECKOUT SUCCESSFUL", id + " has been added to your account. You have 14 days. Enjoy!");
+            }else{
+                QMessageBox::warning(this, "CHECKOUT UNSUCCESSFUL", "We are unable to complete this action as you either have reached max loans, have a locked account or the item is not available. You may place a hold instead!");
+            }
+
         }else{
             QMessageBox::information(this, "Cancelled", "Checkout Cancelled");
         }
@@ -233,7 +240,12 @@ void MainWindow::on_CatalogueTable_cellDoubleClicked(int row, int column)
                     "Are you sure you want to place a hold on this item?",
                     QMessageBox::Yes|QMessageBox::No);
         if(reply == QMessageBox::Yes){
-            controller->placeHold(s);
+            bool a = controller->placeHold(s);
+            if(a == true){
+                QMessageBox::information(this, "HOLD SUCCESSFUL", id + " has been added to your account. Check your queue position on My Account. Enjoy!");
+            }else{
+                QMessageBox::warning(this, "HOLD UNSUCCESSFUL", "We are unable to complete this action as this item is available. You may checkout instead!");
+            }
         }else{
             QMessageBox::information(this, "Cancelled", "Hold Cancelled");
         }

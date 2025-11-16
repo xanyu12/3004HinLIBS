@@ -59,7 +59,6 @@ void Boundary::displayCatalogue(Catalogue& c){
 }
 
 void Boundary::displayLoans(Patron &p){
-    cout << "Printing Loans" << endl;
     ui->patronLoanTable->setRowCount(p.getNumLoans());
     for(int i = 0; i < p.getNumLoans(); ++i){
         Loan* thisLoan = p.getLoanByIdx(i);
