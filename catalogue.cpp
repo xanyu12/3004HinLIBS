@@ -1,13 +1,22 @@
 #include "catalogue.h"
 
+/*
+ * Function: Catalogue constructor
+*/
 Catalogue::Catalogue()
 {
     numItems = 0;
     catalogueID = "L0001";
 }
 
+/*
+ * Function: Catalogue deconstructor
+*/
 Catalogue::~Catalogue(){}
 
+/*
+ * Function: Populate catalogue with various items
+*/
 void Catalogue::populate()
 {
     FictionBook b1("FB00001", "The Vegetarian", "Han Kang", 2007, Condition::New, "Paperback", Status::Available, "9781101906118");
@@ -58,6 +67,10 @@ void Catalogue::populate()
 }
 
 
+/*
+ * Function: Add a catalogue item to the catalogue array
+ * In: catalogue item to be added
+*/
 void Catalogue::addItem(CatalogueItem& i)
 {
     if(numItems < MAX_ARR){
@@ -69,10 +82,20 @@ void Catalogue::addItem(CatalogueItem& i)
     }
 }
 
+/*
+ * Function: Get a catalogue item from the catalogue array by index
+ * In: integer index in array
+ * Out: catalogue item
+*/
 CatalogueItem* Catalogue::getItem(int i){
     return &catalogueArr[i];
 }
 
+/*
+ * Function: Get a catalogue item from the catalogue array by name
+ * In: string title of item in array
+ * Out: catalogue item
+*/
 CatalogueItem* Catalogue::search(string& s){
     cout << "Finding Item: " + s << endl;
     for(int i = 0; i < numItems; ++i){
@@ -85,6 +108,9 @@ CatalogueItem* Catalogue::search(string& s){
     return nullptr;
 }
 
+/*
+ * Function: getter
+*/
 int Catalogue::getNumItems(){
     return numItems;
 }

@@ -1,7 +1,14 @@
 #include "boundary.h"
 
+/*
+ * Function: Boundary object constructor
+*/
 Boundary::Boundary(Ui::MainWindow* m) : ui(m){}
 
+
+/*
+ * Function: Various page switching functions
+*/
 void Boundary::showStartPage(){
     ui->stackedWidget->setCurrentIndex(0);
 }
@@ -29,6 +36,10 @@ void Boundary::showStaffHomePage(){
 void Boundary::showAdminHomePage(){
     ui->stackedWidget->setCurrentIndex(8);
 }
+
+/*
+ * Function: Various login error functions
+*/
 void Boundary::displayAdminLoginError(string& e){
     ui->adminErrorLabel->setText(QString::fromStdString(e));
 }
@@ -39,12 +50,19 @@ void Boundary::displayStaffLoginError(string& e){
     ui->staffErrorLabel->setText(QString::fromStdString(e));
 }
 
+/*
+ * Function: Read search input
+*/
 string Boundary::getSearchInput()
 {
     QString text = ui->hintonTitle->text();
     return text.toStdString();
 }
 
+/*
+ * Function: Display library catalogue on QT table
+ * In: Catalogue
+*/
 void Boundary::displayCatalogue(Catalogue& c){
     ui->CatalogueTable->setRowCount(c.getNumItems());
     for(int i = 0; i < c.getNumItems(); ++i){
@@ -58,6 +76,10 @@ void Boundary::displayCatalogue(Catalogue& c){
     ui->CatalogueTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
+/*
+ * Function: Display User Loans on QT table
+ * In: Patron
+*/
 void Boundary::displayLoans(Patron &p){
     ui->patronLoanTable->setRowCount(p.getNumLoans());
     for(int i = 0; i < p.getNumLoans(); ++i){
@@ -74,6 +96,10 @@ void Boundary::displayLoans(Patron &p){
      ui->patronLoanTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
+/*
+ * Function: Display user holds on QT table
+ * In: Patron
+*/
 void Boundary::displayHolds(Patron &p){
     ui->patronHoldTable->setRowCount(p.getNumHolds());
     for(int i = 0; i < p.getNumHolds(); ++i){
@@ -85,6 +111,10 @@ void Boundary::displayHolds(Patron &p){
     ui->patronHoldTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
+/*
+ * Function: Display user account details
+ * In: Patron
+*/
 void Boundary::displayAccount(Patron &p){
     ui->patronNameText->setText(QString::fromStdString("Full Name: " + p.getName()));
     ui->patronBalanceText->setText(QString::fromStdString("Account Balance: $" + to_string(p.getAccountBalance())));
