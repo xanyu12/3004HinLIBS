@@ -4,6 +4,7 @@
 #include <QPushButton>
 
 #include "control.h"
+#include "database.h"
 
 int main(int argc, char *argv[])
 {
@@ -14,12 +15,15 @@ int main(int argc, char *argv[])
     QPushButton b;
     MainWindow w;
 
-    Boundary boundary(w.getUI());
-    Library library;
-    Control controller(&boundary, &library);
+//    Boundary boundary(w.getUI());
+//    Library library;
+//    Control controller(&boundary, &library);
 
-    w.setControl(&controller);
-    w.show();
+    Database d;
+    d.connect();
+
+//    w.setControl(&controller);
+//    w.show();
 
     return a.exec();
 }

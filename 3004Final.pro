@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,6 +13,7 @@ SOURCES += \
     catalogue.cpp \
     catalogueItem.cpp \
     control.cpp \
+    database.cpp \
     date.cpp \
     fine.cpp \
     hold.cpp \
@@ -27,6 +28,7 @@ HEADERS += \
     catalogue.h \
     catalogueItem.h \
     control.h \
+    database.h \
     date.h \
     defs.h \
     fine.h \
