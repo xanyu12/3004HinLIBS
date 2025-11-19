@@ -3,12 +3,17 @@
 #include <QtSql>
 #include <QtDebug>
 
+#include "catalogueItem.h"
+
 class Database{
 public:
 
     Database();
-    void connect();
 
+    bool handleCheckOut(string& s, string& t);
+
+private:
+    QSqlDatabase db;
 };
 
 #endif // DATABASE_H

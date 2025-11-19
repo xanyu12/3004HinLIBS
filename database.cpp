@@ -1,10 +1,7 @@
 #include "database.h"
 #include "defs.h"
 
-Database::Database(){}
-
-
-void Database::connect(){
+Database::Database(){
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
     db.setDatabaseName("/home/student/3004HinLIBS/PRAChinlibs.db");
 
@@ -15,3 +12,6 @@ void Database::connect(){
 
     cout << "CONNECTED" << endl;
 }
+
+
+void Database::

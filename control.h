@@ -4,11 +4,12 @@
 #include "defs.h"
 #include "boundary.h"
 #include "library.h"
+#include "database.h"
 
 class Control
 {
 public:
-    Control(Boundary* b, Library* l);
+    Control(Boundary* b, Library* l, Database* db);
 
     void runSystem();
     void setUser(User* u);
@@ -33,6 +34,7 @@ public:
 
 private:
     Boundary* ui;
+    Database* db;
     Library* library_;
     User* currentUser;
 
