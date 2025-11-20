@@ -15,15 +15,12 @@ int main(int argc, char *argv[])
     QPushButton b;
     MainWindow w;
 
-//    Boundary boundary(w.getUI());
-//    Library library;
-//    Control controller(&boundary, &library);
+    Boundary boundary(w.getUI());
+    Library library;
+    Control controller(&boundary, &library);
 
-    Database d;
-    d.connect();
-
-//    w.setControl(&controller);
-//    w.show();
+    w.setControl(&controller);
+    w.show();
 
     return a.exec();
 }

@@ -1,9 +1,8 @@
 #include "control.h"
 
-Control::Control(Boundary* b, Library* l, Database* d){
+Control::Control(Boundary* b, Library* l){
     ui = b;
     library_ = l;
-    db = d;
     currentUser = nullptr;
 }
 
@@ -11,25 +10,19 @@ void Control::setUser(User* u){
     currentUser = u;
 }
 
-//bool Control::checkOutItem(string &s){
-//    cout << "Checking Out: " + s << endl;
-//    CatalogueItem* item = library_->findItem(s);
-//    bool b = library_->checkOutItem(item, currentUser);
-//    if(b == true){
-//        cout << "DONE CHECKOUT" << endl;
-//        Catalogue cat = library_->getCatalogue();
-//        ui->displayCatalogue(cat);
-//        return true;
-//    }
-//    cout << "FAILED CHECKOUT" << endl;
-//    return false;
-//}
-
 bool Control::checkOutItem(string &s){
     cout << "Checking Out: " + s << endl;
-    return true;
+    CatalogueItem* item = library_->findItem(s);
+    bool b = library_->checkOutItem(item, currentUser);
+    if(b == true){
+        cout << "DONE CHECKOUT" << endl;
+        Catalogue cat = library_->getCatalogue();
+        ui->displayCatalogue(cat);
+        return true;
+    }
+    cout << "FAILED CHECKOUT" << endl;
+    return false;
 }
-
 
 
 bool Control::checkInItem(string &s){
@@ -143,6 +136,7 @@ void Control::handleAdminLogin(string &username, string &password){
         ui->displayAdminLoginError(err);
     }
 }
+
 void Control::handlePatronLogin(string &cardNum, string &pin){
     cout << "Patron Logging In" << endl;
     cout << "Card: " + cardNum << endl;

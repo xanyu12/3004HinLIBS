@@ -17,6 +17,7 @@ public:
     void setDate(int, int, int);
 
     string toString();
+    Date fromString(string& s);
 
     bool operator==(Date& other);
     bool operator<(Date& other);

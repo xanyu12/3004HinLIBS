@@ -4,6 +4,7 @@
 #include "defs.h"
 #include "catalogue.h"
 #include "user.h"
+#include <QtSql>
 
 class Library
 {
@@ -11,33 +12,34 @@ class Library
     Library();
     ~Library();
 
-    void populateUsers();
-    void addUser(Patron& p);
-    void addStaff(Librarian& l);
-    void addAdmin(Admin& a);
-    void loadCatalogue();
+//    void populateUsers();
+//    void addUser(Patron& p);
+//    void addStaff(Librarian& l);
+//    void addAdmin(Admin& a);
+//    void loadCatalogue();
 
-    CatalogueItem* findItem(string& s);
-    Librarian* findStaffByName(string& s);
-    Admin* findAdminByName(string& s);
-    Patron* findUserByNum(string& n);
-    Patron* findUserByName(string & s);
+//    CatalogueItem* findItem(string& s);
+//    Librarian* findStaffByName(string& s);
+//    Admin* findAdminByName(string& s);
+//    Patron* findUserByNum(string& n);
+//    Patron* findUserByName(string & s);
 
-    bool checkInItem(CatalogueItem* i, User* p);
-    bool checkOutItem(CatalogueItem* i, User* p);
-    bool createHold(CatalogueItem* i, User* p);
-    bool cancelHold(CatalogueItem* i, User* p);
+
+    bool checkInItem(string& itemID, string& userID);
+    bool checkOutItem(string& itemID, string& userID);
+    bool createHold(string& itemID, string& userID);
+    bool cancelHold(string& itemID, string& userID);
 
     double calculateFine(Date& d1, Date& d2);
-
     int getNumUsers();
     int getNumStaff();
     int getNumAdmin();
-    Catalogue getCatalogue();
 
     Date getToday();
 
 private:
+    QSqlDatabase db;
+
     Catalogue collection;
     int numUsers;
     int numStaff;

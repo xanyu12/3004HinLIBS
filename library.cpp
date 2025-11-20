@@ -4,67 +4,193 @@ Library::Library(){
     numUsers = 0;
     numStaff = 0;
     numAdmin = 0;
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+    db.setDatabaseName("/home/student/3004HinLIBS/PRAChinlibs.db");
+
+    if(!db.open()){
+        cout << "CANNOT CONNECT" << endl;
+        return;
+    }
+    cout << "CONNECTED" << endl;
 }
 
-Library::~Library(){}
-
-void Library::populateUsers(){
-    Patron p1("julia74", "Julia Salvatore","julia1974@gmail.com", "101000001", "1234", 0.0, true);
-    Patron p2("nominomi", "Naomi Carthen", "ncarthen@gmail.com", "101000002", "2345", 0.0, true);
-    Patron p3("pengting", "Elena Peng", "elenap@gmail.com", "101000003", "3456",  0.0, true);
-    Patron p4("nene1999", "Nene Leakes", "laneithia@gmail.com", "101000004", "4567", 0.0, true);
-    Patron p5("santana", "Bonnie Santana", "bonbon@gmail.com", "101000005", "5678",  0.0, true);
-    Librarian p6("jojojoestar", "Jonathan Joestar", "jj@gmail.com", "pa55wd");
-    Admin p7("bigmike", "Michael Scott", "mike.scott@gmail.com", "secret!");
-
-    addUser(p1);
-    addUser(p2);
-    addUser(p3);
-    addUser(p4);
-    addUser(p5);
-
-    addStaff(p6);
-
-    addAdmin(p7);
-
-    cout << "Populated Users" << endl;
+Library::~Library(){
+    if(db.isOpen()){
+        db.close();
+    }
 }
 
-void Library::loadCatalogue(){
-    collection.populate();
 
-    cout << "Loaded Catalogue" << endl;
-}
 
-void Library::addUser(Patron& u){
-  if(numUsers < MAX_ARR){
-      cout << "Adding User: " + u.getUserID()<< endl;
-      users[numUsers] = u;
-      numUsers++;
-  }else{
-      cout << "Maximum Users Reached" << endl;
-  }
-}
+bool Library::checkInItem(string& itemID, string& userID){
+    QSqlQuery query;
+    query.prepare("SELECT status FROM catalogue WHERE itemID = :id");
+    query.bindValue(":id", QString::fromStdString(itemID));
+    query.exec();
+    if(query.next()){
+        string itemStatus = query.value("status").toString().toStdString();
+        if(itemStatus == "Available"){
+            query.prepare("SELECT status FROM users WHERE userID = :id");
+            query.bindValue(":id", QString::fromStdString(userID));
+            query.exec();
+            if(query.next()){
+                string userStatus = query.value("status").toString().toStdString();
+                if(userStatus == "Active"){
+                    query.prepare("SELECT currentLoanNum FROM patron WHERE userID = :id");
+                    query.bindValue(":id", QString::fromStdString(userID));
+                    query.exec();
+                    if(query.next()){
+                        int userLoan = query.value("currentLoanNum").toString().toInt();
+                        if(userLoan <= 3){
+                            userLoan++;
+                            Date today = getToday();
+                            Date due = today + 14;
+                            string date1 = today.toString();
+                            string date2 = due.toString();
 
-void Library::addStaff(Librarian &l){
-  if(numStaff < MAX_ARR){
-      cout << "Adding Staff: " + l.getUserID() << endl;
-      staff[numStaff] = l;
-      numStaff++;
-  }else{
-      cout << "Maximum Staff Reached" << endl;
-  }
-}
+                            query.prepare("UPDATE catalogue SET status = :s WHERE itemID = :d");
+                            query.bindValue(":s", "Unavailable");
+                            query.bindValue(":d", QString::fromStdString(userID));
+                            query.exec();
+                            if(!query.next()){
+                                cout << "UPDATE CATALOGUE PROBLEM" << endl;
+                                return false;
+                            }
 
-void Library::addAdmin(Admin &a){
-  if(numAdmin < MAX_ARR){
-      cout << "Adding Admin: " + a.getUserID() << endl;
-      admin[numAdmin] = a;
-      numAdmin++;
-  }else{
-      cout << "Maximum Staff Reached" << endl;
-  }
+                            query.prepare("UPDATE patron SET currentLoanNum = :n WHERE userID = :d");
+                            query.bindValue(":s", userLoan);
+                            query.bindValue(":d", QString::fromStdString(userID));
+                            query.exec();
+                            if(!query.next()){
+                                cout << "UPDATE PATRON PROBLEM" << endl;
+                                return false;
+                            }
+
+                            query.prepare("INSERT INTO loans VALUES (:itemID, :userID, :loanDate, :dueDate, :returnDate)");
+                            query.bindValue(":itemID", QString::fromStdString(itemID));
+                            query.bindValue(":userID", QString::fromStdString(userID));
+                            query.bindValue(":loanDate", QString::fromStdString(date1));
+                            query.bindValue(":dueDate", QString::fromStdString(date2));
+                            query.bindValue(":returnDate", "");
+
+                            query.exec();
+                            if(!query.next()){
+                                cout << "INSERT LOAN PROBLEM" << endl;
+                                return false;
+                            }
+                            return true;
+                        }
+                        cout << "ERROR: USER AT MAX LOANS" << endl;
+                        return false;
+                    }else{
+                        cout << "ERROR: QUERY" << endl;
+                        return false;
+                    }
+                }else{
+                    cout << "ERROR: USER ACCOUNT LOCKED"  << endl;
+                    return false;
+                }
+            }else{
+                cout << "ERROR: QUERY" << endl;
+                return false;
+
+            }
+        }else{
+            cout << "ERROR: ITEM UNAVAILABLE" << endl;
+            return false;
+       }
+
+    }else{
+        cout << "ERROR: QUERY" << endl;
+        return false;
+
+    }
+
 }
+bool Library::checkOutItem(string& itemID, string& userID){
+    //calculate fine
+    //update patron loannum
+    //update book status
+    //update loan date
+    QSqlQuery query;
+    query.prepare("SELECT loanDate FROM loans WHERE itemID = :itemID AND userID = :userID AND returnDate = :e");
+    query.bindValue(":itemID", QString::fromStdString(itemID));
+    query.bindValue(":userID", QString::fromStdString(userID));
+    query.bindValue(":e", "");
+    query.exec();
+
+    if(query.next()){
+        string loanDate = query.value("loanDate").toString().toStdString();
+        Date
+    }else{
+        cout << "ERROR: LOAN DATE" << endl;
+    }
+}
+bool Library::createHold(string& itemID, string& userID){}
+bool Library::cancelHold(string& itemID, string& userID){}
+
+
+
+
+
+//void Library::populateUsers(){
+//    Patron p1("julia74", "Julia Salvatore","julia1974@gmail.com", "101000001", "1234", 0.0, true);
+//    Patron p2("nominomi", "Naomi Carthen", "ncarthen@gmail.com", "101000002", "2345", 0.0, true);
+//    Patron p3("pengting", "Elena Peng", "elenap@gmail.com", "101000003", "3456",  0.0, true);
+//    Patron p4("nene1999", "Nene Leakes", "laneithia@gmail.com", "101000004", "4567", 0.0, true);
+//    Patron p5("santana", "Bonnie Santana", "bonbon@gmail.com", "101000005", "5678",  0.0, true);
+//    Librarian p6("jojojoestar", "Jonathan Joestar", "jj@gmail.com", "pa55wd");
+//    Admin p7("bigmike", "Michael Scott", "mike.scott@gmail.com", "secret!");
+
+//    addUser(p1);
+//    addUser(p2);
+//    addUser(p3);
+//    addUser(p4);
+//    addUser(p5);
+
+//    addStaff(p6);
+
+//    addAdmin(p7);
+
+//    cout << "Populated Users" << endl;
+//}
+
+//void Library::loadCatalogue(){
+//    collection.populate();
+
+//    cout << "Loaded Catalogue" << endl;
+//}
+
+//void Library::addUser(Patron& u){
+//  if(numUsers < MAX_ARR){
+//      cout << "Adding User: " + u.getUserID()<< endl;
+//      users[numUsers] = u;
+//      numUsers++;
+//  }else{
+//      cout << "Maximum Users Reached" << endl;
+//  }
+//}
+
+//void Library::addStaff(Librarian &l){
+//  if(numStaff < MAX_ARR){
+//      cout << "Adding Staff: " + l.getUserID() << endl;
+//      staff[numStaff] = l;
+//      numStaff++;
+//  }else{
+//      cout << "Maximum Staff Reached" << endl;
+//  }
+//}
+
+//void Library::addAdmin(Admin &a){
+//  if(numAdmin < MAX_ARR){
+//      cout << "Adding Admin: " + a.getUserID() << endl;
+//      admin[numAdmin] = a;
+//      numAdmin++;
+//  }else{
+//      cout << "Maximum Staff Reached" << endl;
+//  }
+//}
 
 
 CatalogueItem* Library::findItem(string &s){

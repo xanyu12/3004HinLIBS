@@ -9,7 +9,7 @@
 class Control
 {
 public:
-    Control(Boundary* b, Library* l, Database* db);
+    Control(Boundary* b, Library* l);
 
     void runSystem();
     void setUser(User* u);
@@ -34,7 +34,6 @@ public:
 
 private:
     Boundary* ui;
-    Database* db;
     Library* library_;
     User* currentUser;
 
