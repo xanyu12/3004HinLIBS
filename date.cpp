@@ -9,13 +9,24 @@ int Date::getMonth(){return month;}
 int Date::getYear(){return year;}
 
 string Date::toString(){
-    string s = to_string(day) + "-" + getMonthStr(month) + "-" + to_string(year);
+    string d = "";
+    string m = "";
+    if(day < 10){
+        d = "0" + to_string(day);
+    }else{
+        d = to_string(day);
+    }
+    if(month < 10){
+        m = "0" + to_string(month);
+    }else{
+        m = to_string(month);
+    }
+    string s = d + "-" + m + "-" + to_string(year);
     return s;
 }
 
-Date Date::fromString(string &s){
 
-}
+
 void Date::setDate(int d, int m, int y){
     year = ((y > 0)? y : 0);
     month = ((m > 0 && m <= 12)? m:0);

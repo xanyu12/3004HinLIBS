@@ -41,7 +41,7 @@ bool Library::checkInItem(string& itemID, string& userID){
                     query.bindValue(":id", QString::fromStdString(userID));
                     query.exec();
                     if(query.next()){
-                        int userLoan = query.value("currentLoanNum").toString().toInt();
+                        int userLoan = query.value("currentLoanNum").toInt();
                         if(userLoan <= 3){
                             userLoan++;
                             Date today = getToday();
@@ -59,7 +59,7 @@ bool Library::checkInItem(string& itemID, string& userID){
                             }
 
                             query.prepare("UPDATE patron SET currentLoanNum = :n WHERE userID = :d");
-                            query.bindValue(":s", userLoan);
+                            query.bindValue(":n", userLoan);
                             query.bindValue(":d", QString::fromStdString(userID));
                             query.exec();
                             if(!query.next()){
@@ -109,29 +109,91 @@ bool Library::checkInItem(string& itemID, string& userID){
 
 }
 bool Library::checkOutItem(string& itemID, string& userID){
-    //calculate fine
-    //update patron loannum
     //update book status
-    //update loan date
     QSqlQuery query;
-    query.prepare("SELECT loanDate FROM loans WHERE itemID = :itemID AND userID = :userID AND returnDate = :e");
+    query.prepare("SELECT loanID, dueDate FROM loans WHERE itemID = :itemID AND userID = :userID AND returnDate = :e");
     query.bindValue(":itemID", QString::fromStdString(itemID));
     query.bindValue(":userID", QString::fromStdString(userID));
     query.bindValue(":e", "");
     query.exec();
 
     if(query.next()){
-        string loanDate = query.value("loanDate").toString().toStdString();
-        Date
+        string d = query.value("dueDate").toString().toStdString();
+        string lID = query.value("loanID").toString().toStdString();
+
+        Date today = getToday();
+        query.prepare("UPDATE loans SET returnDate = :r WHERE loanID = :loanID");
+        query.bindValue(":r", QString::fromStdString(today.toString()));
+        query.bindValue(":loanID", QString::fromStdString(lID));
+        query.exec();
+
+        Date dueDate = convertFromString(d);
+        double f = calculateFine(dueDate, today);
+        if(f > 0.00){
+            query.prepare("SELECT balance FROM patron WHERE userID = :u");;
+            query.bindValue(":u", QString::fromStdString(userID));
+            query.exec();
+
+            double fine = query.value("balance").toDouble();
+            double total = fine + f;
+            query.prepare("UPDATE patron SET balance = :b WHERE userID = :u");
+            query.bindValue(":b", total);
+            query.bindValue(":u", QString::fromStdString(userID));
+            query.exec();
+
+            query.prepare("INSERT INTO fines VALUES(:l, :a, :s");
+            query.bindValue(":l", QString::fromStdString(lID));
+            query.bindValue(":a", fine);
+            query.bindValue(":s", "UNPAID");
+            query.exec();
+
+        }
+        query.prepare("SELECT currentLoanNum FROM patron WHERE userID = :id");
+        query.bindValue(":id", QString::fromStdString(userID));
+        query.exec();
+        int loanNum = query.value("currentLoanNum").toInt();
+        loanNum++;
+        query.prepare("UPDATE patron SET currentLoanNum = :c WHERE userID = :u");
+        query.bindValue(":c", loanNum);
+        query.bindValue(":u", QString::fromStdString(userID));
+        query.exec();
+        query.prepare("UPDATE catalogue SET status = :a WHERE itemID = :id");
+        query.bindValue(":a", "Available");
+        query.bindValue(":id", QString::fromStdString(itemID));
+        query.exec();
+        return true;
+
     }else{
         cout << "ERROR: LOAN DATE" << endl;
+        return false;
     }
 }
+
 bool Library::createHold(string& itemID, string& userID){}
 bool Library::cancelHold(string& itemID, string& userID){}
 
 
+Date Library::convertFromString(string &s){
+    string tempD = "";
+    tempD += s[0];
+    tempD += s[1];
+    int d = stoi(tempD);
 
+    string tempM = "";
+    tempM += s[3];
+    tempM += s[4];
+    int m = stoi(tempM);
+
+    string tempY = "";
+    tempY += s[6];
+    tempY += s[7];
+    tempY += s[8];
+    tempY += s[0];
+    int y = stoi(tempY);
+
+    Date newD = Date(d, m, y);
+    return newD;
+}
 
 
 //void Library::populateUsers(){
@@ -217,46 +279,46 @@ Date Library::getToday(){
     return today;
 }
 
-bool Library::checkInItem(CatalogueItem* i, User* u){
-    string s = u->getUserID();
-    Patron* p = findUserByName(s);
-    Loan* thisLoan = p->getLoanByItem(*i);
-    Date returnDay = getToday();
-    Date loanDay = thisLoan->getLoanDate();
-    double total = calculateFine(loanDay, returnDay);
-    if(total > 0.00){
-        string id = "F" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-        Fine f(id, total);
-        p->addFine(f);
-        thisLoan->setFine(total);
-    }
-    thisLoan->setReturnDate(returnDay);
-    i->checkIn();
-    return true;
-}
+//bool Library::checkInItem(CatalogueItem* i, User* u){
+//    string s = u->getUserID();
+//    Patron* p = findUserByName(s);
+//    Loan* thisLoan = p->getLoanByItem(*i);
+//    Date returnDay = getToday();
+//    Date loanDay = thisLoan->getLoanDate();
+//    double total = calculateFine(loanDay, returnDay);
+//    if(total > 0.00){
+//        string id = "F" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+//        Fine f(id, total);
+//        p->addFine(f);
+//        thisLoan->setFine(total);
+//    }
+//    thisLoan->setReturnDate(returnDay);
+//    i->checkIn();
+//    return true;
+//}
 
-bool Library::checkOutItem(CatalogueItem* i, User* u){
-    string s = u->getUserID();
-    Patron* p = findUserByName(s);
-    cout << "Checking out item: " + i->getTitle() + " for " + p->getUserID() << endl;
-    if(i->getCirculationStatus() == Status::Available && p->getAccountStatus() == "Active"){
-        cout << "Borrow Available" << endl;
-        Date loanDay = getToday();
-        string id = "L" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-        Loan newLoan(id, loanDay, 0, 0.0);
-        newLoan.setItem(i);
-        bool a = p->addLoan(newLoan);
-        if(a == true){
-            cout << "CHECKED OUT" << endl;
-            i->checkOut();
-        }else{
-            return false;
-        }
-        return true;
-    }else{
-        return false;
-    }
-}
+//bool Library::checkOutItem(CatalogueItem* i, User* u){
+//    string s = u->getUserID();
+//    Patron* p = findUserByName(s);
+//    cout << "Checking out item: " + i->getTitle() + " for " + p->getUserID() << endl;
+//    if(i->getCirculationStatus() == Status::Available && p->getAccountStatus() == "Active"){
+//        cout << "Borrow Available" << endl;
+//        Date loanDay = getToday();
+//        string id = "L" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
+//        Loan newLoan(id, loanDay, 0, 0.0);
+//        newLoan.setItem(i);
+//        bool a = p->addLoan(newLoan);
+//        if(a == true){
+//            cout << "CHECKED OUT" << endl;
+//            i->checkOut();
+//        }else{
+//            return false;
+//        }
+//        return true;
+//    }else{
+//        return false;
+//    }
+//}
 
 bool Library::createHold(CatalogueItem* i, User* u){
     string s = u->getUserID();

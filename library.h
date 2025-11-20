@@ -36,6 +36,7 @@ class Library
     int getNumAdmin();
 
     Date getToday();
+    Date convertFromString(string& s);
 
 private:
     QSqlDatabase db;
