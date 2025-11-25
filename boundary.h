@@ -2,8 +2,6 @@
 #define BOUNDARY_H
 
 #include "defs.h"
-#include "user.h"
-#include "catalogue.h"
 #include "ui_mainwindow.h"
 #include <QObject>
 #include <QString>
@@ -22,10 +20,10 @@ public:
     Boundary(Ui::MainWindow* ui);
 
     string getSearchInput();
-    void displayCatalogue(Catalogue& c);
-    void displayLoans(Patron& p);
-    void displayHolds(Patron& p);
-    void displayAccount(Patron& p);
+    void displayCatalogue();
+    void displayLoans();
+    void displayHolds();
+    void displayAccount();
 
     void displayAdminLoginError(string& e);
     void displayStaffLoginError(string& e);

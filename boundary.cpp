@@ -63,63 +63,63 @@ string Boundary::getSearchInput()
  * Function: Display library catalogue on QT table
  * In: Catalogue
 */
-void Boundary::displayCatalogue(Catalogue& c){
-    ui->CatalogueTable->setRowCount(c.getNumItems());
-    for(int i = 0; i < c.getNumItems(); ++i){
-        CatalogueItem* curr = c.getItem(i);
-        ui->CatalogueTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(curr->getTitle())));
-        ui->CatalogueTable->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(curr->getCreator())));
-        ui->CatalogueTable->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(curr->getFormat())));
-        ui->CatalogueTable->setItem(i, 3, new QTableWidgetItem(QString::fromStdString(curr->translateStatus(curr->getCirculationStatus()))));
-    }
-    ui->CatalogueTable->resizeColumnsToContents();
-    ui->CatalogueTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+void Boundary::displayCatalogue(){
+//    ui->CatalogueTable->setRowCount(c.getNumItems());
+//    for(int i = 0; i < c.getNumItems(); ++i){
+//        CatalogueItem* curr = c.getItem(i);
+//        ui->CatalogueTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(curr->getTitle())));
+//        ui->CatalogueTable->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(curr->getCreator())));
+//        ui->CatalogueTable->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(curr->getFormat())));
+//        ui->CatalogueTable->setItem(i, 3, new QTableWidgetItem(QString::fromStdString(curr->translateStatus(curr->getCirculationStatus()))));
+//    }
+//    ui->CatalogueTable->resizeColumnsToContents();
+//    ui->CatalogueTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 /*
  * Function: Display User Loans on QT table
  * In: Patron
 */
-void Boundary::displayLoans(Patron &p){
-    ui->patronLoanTable->setRowCount(p.getNumLoans());
-    for(int i = 0; i < p.getNumLoans(); ++i){
-        Loan* thisLoan = p.getLoanByIdx(i);
-        CatalogueItem* curr = thisLoan->getItem();
-        QDate today = QDate::currentDate();
-        Date d(today.day(), today.month(), today.year());
-        Date due = thisLoan->getLoanDate() + 14;
-        ui->patronLoanTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(curr->getTitle())));
-        ui->patronLoanTable->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(due.toString())));
-        ui->patronLoanTable->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(to_string(due-d))));
-    }
-     ui->patronLoanTable->resizeColumnsToContents();
-     ui->patronLoanTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+void Boundary::displayLoans(){
+//    ui->patronLoanTable->setRowCount(p.getNumLoans());
+//    for(int i = 0; i < p.getNumLoans(); ++i){
+//        Loan* thisLoan = p.getLoanByIdx(i);
+//        CatalogueItem* curr = thisLoan->getItem();
+//        QDate today = QDate::currentDate();
+//        Date d(today.day(), today.month(), today.year());
+//        Date due = thisLoan->getLoanDate() + 14;
+//        ui->patronLoanTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(curr->getTitle())));
+//        ui->patronLoanTable->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(due.toString())));
+//        ui->patronLoanTable->setItem(i, 2, new QTableWidgetItem(QString::fromStdString(to_string(due-d))));
+//    }
+//     ui->patronLoanTable->resizeColumnsToContents();
+//     ui->patronLoanTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 /*
  * Function: Display user holds on QT table
  * In: Patron
 */
-void Boundary::displayHolds(Patron &p){
-    ui->patronHoldTable->setRowCount(p.getNumHolds());
-    for(int i = 0; i < p.getNumHolds(); ++i){
-        Hold* thisHold = p.getHoldByIdx(i);
-        ui->patronHoldTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(thisHold->getItemTitle())));
-        ui->patronHoldTable->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(to_string(thisHold->getPosition()))));
-    }
-    ui->patronHoldTable->resizeColumnsToContents();
-    ui->patronHoldTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+void Boundary::displayHolds(){
+//    ui->patronHoldTable->setRowCount(p.getNumHolds());
+//    for(int i = 0; i < p.getNumHolds(); ++i){
+//        Hold* thisHold = p.getHoldByIdx(i);
+//        ui->patronHoldTable->setItem(i, 0, new QTableWidgetItem(QString::fromStdString(thisHold->getItemTitle())));
+//        ui->patronHoldTable->setItem(i, 1, new QTableWidgetItem(QString::fromStdString(to_string(thisHold->getPosition()))));
+//    }
+//    ui->patronHoldTable->resizeColumnsToContents();
+//    ui->patronHoldTable->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 
 /*
  * Function: Display user account details
  * In: Patron
 */
-void Boundary::displayAccount(Patron &p){
-    ui->patronNameText->setText(QString::fromStdString("Full Name: " + p.getName()));
-    ui->patronBalanceText->setText(QString::fromStdString("Account Balance: $" + to_string(p.getAccountBalance())));
-    ui->patronCardText->setText(QString::fromStdString("Library Card Number: " + p.getCardNum()));
-    ui->patronContactText->setText(QString::fromStdString("Contact: " + p.getContact()));
-    ui->patronStatusText->setText(QString::fromStdString("Status: " + p.getAccountStatus()));
-    ui->patronUsernameText->setText(QString::fromStdString("Username: " + p.getUserID()));
+void Boundary::displayAccount(){
+//    ui->patronNameText->setText(QString::fromStdString("Full Name: " + p.getName()));
+//    ui->patronBalanceText->setText(QString::fromStdString("Account Balance: $" + to_string(p.getAccountBalance())));
+//    ui->patronCardText->setText(QString::fromStdString("Library Card Number: " + p.getCardNum()));
+//    ui->patronContactText->setText(QString::fromStdString("Contact: " + p.getContact()));
+//    ui->patronStatusText->setText(QString::fromStdString("Status: " + p.getAccountStatus()));
+//    ui->patronUsernameText->setText(QString::fromStdString("Username: " + p.getUserID()));
 }

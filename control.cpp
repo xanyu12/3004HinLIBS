@@ -58,11 +58,6 @@ bool Control::cancelHold(string& s){
     return false;
 }
 
-void Control::loadLibrary(){
-    library_->loadCatalogue();
-    library_->populateUsers();
-}
-
 void Control::runSystem(){
     loadLibrary();
     ui->showStartPage();
@@ -86,7 +81,7 @@ void Control::handleLibrarianStart(){
 
 void Control::handlePatronBrowse(){
     Catalogue p = library_->getCatalogue();
-    ui->displayCatalogue(p);
+    ui->displayCatalogue();
     ui->showPatronCataloguePage();
 }
 
@@ -94,8 +89,8 @@ void Control::handlePatronMyAccount(){
     string s = currentUser->getUserID();
     Patron* p = library_->findUserByName(s);
     cout << "Current User: " + p->getName() << endl;
-    ui->displayHolds(*p);
-    ui->displayLoans(*p);
+    ui->displayHolds();
+    ui->displayLoans();
     ui->showPatronAccountPage();
 }
 

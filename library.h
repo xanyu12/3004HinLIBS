@@ -19,11 +19,12 @@ class Library
 //    void loadCatalogue();
 
 //    CatalogueItem* findItem(string& s);
-//    Librarian* findStaffByName(string& s);
-//    Admin* findAdminByName(string& s);
-//    Patron* findUserByNum(string& n);
-//    Patron* findUserByName(string & s);
 
+
+    Librarian* findStaffByName(string& s);
+    Admin* findAdminByName(string& s);
+    Patron* findUserByNum(string& n);
+    Patron* findUserByName(string & s);
 
     bool checkInItem(string& itemID, string& userID);
     bool checkOutItem(string& itemID, string& userID);

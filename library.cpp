@@ -21,8 +21,6 @@ Library::~Library(){
     }
 }
 
-
-
 bool Library::checkInItem(string& itemID, string& userID){
     QSqlQuery query;
     query.prepare("SELECT status FROM catalogue WHERE itemID = :id");
@@ -169,8 +167,73 @@ bool Library::checkOutItem(string& itemID, string& userID){
     }
 }
 
-bool Library::createHold(string& itemID, string& userID){}
-bool Library::cancelHold(string& itemID, string& userID){}
+bool Library::createHold(string& itemID, string& userID){
+    //create hold
+    //add user to item queue
+    //increase user queue size
+    QSqlQuery query;
+    query.prepare("SELECT availability FROM catalogue WHERE itemID = :i");
+    query.bindValue("i", QString::fromStdString(itemID));
+    query.exec();
+    if(!query.next()){
+        return false;
+    }
+    string avail = query.value("availabillity").toString().toStdString();
+    if(avail == "Available"){
+        return false;
+    }
+
+    query.prepare("SELECT queueSize FROM catalogue WHERE itemID = :i");
+    query.bindValue(":i", QString::fromStdString(itemID));
+    query.exec();
+    if(!query.next()){
+        return false;
+    }
+    int queueSize = query.value("queueSize").toInt();
+    queueSize++;
+
+    query.prepare("INSERT INTO holds VALUES (:itemID, :userID, :pos)");
+    query.bindValue(":itemID", QString::fromStdString(itemID));
+    query.bindValue(":userID", QString::fromStdString(userID));
+    query.bindValue(":pos", queueSize);
+    query.exec();
+
+    query.prepare("UPDATE catalogue SET queueSize = :num WHERE itemID = :i");
+    query.bindValue(":num", queueSize);
+    query.bindValue(":i", QString::fromStdString(itemID));
+    query.exec();
+
+    return true;
+}
+bool Library::cancelHold(string& itemID, string& userID){
+    //remove user from item queue
+    //update item queue
+    //reduce user queue size
+    QSqlQuery query;
+    query.prepare("SELECT position from holds WHERE itemID = :i and userID = :u");
+    query.bindValue(":i", QString::fromStdString(itemID));
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+    if(!query.next()){
+        return false;
+    }
+    int position = query.value("position").toInt();
+    query.prepare("UPDATE holds SET position = position - 1 WHERE itemID = :i AND position > :pos");
+    query.bindValue(":i", QString::fromStdString(itemID));
+    query.bindValue(":pos", position);
+    query.exec();
+
+    query.prepare("UPDATE catalogue SET queueSize = queueSize - 1 WHERE itemID = :i");
+    query.bindValue(":i", QString::fromStdString(itemID));
+    query.exec();
+
+    query.prepare("DELETE FROM holds WHERE itemID = :i and userID = :u");
+    query.bindValue(":i", QString::fromStdString(itemID));
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+
+    return true;
+}
 
 
 Date Library::convertFromString(string &s){
@@ -188,7 +251,7 @@ Date Library::convertFromString(string &s){
     tempY += s[6];
     tempY += s[7];
     tempY += s[8];
-    tempY += s[0];
+    tempY += s[9];
     int y = stoi(tempY);
 
     Date newD = Date(d, m, y);
@@ -255,9 +318,9 @@ Date Library::convertFromString(string &s){
 //}
 
 
-CatalogueItem* Library::findItem(string &s){
-    return collection.search(s);
-}
+//CatalogueItem* Library::findItem(string &s){
+//    return collection.search(s);
+//}
 
 double Library::calculateFine(Date &d1, Date &d2){
     if(d2 - d1 > LOAN_PERIOD){
@@ -320,28 +383,28 @@ Date Library::getToday(){
 //    }
 //}
 
-bool Library::createHold(CatalogueItem* i, User* u){
-    string s = u->getUserID();
-    Patron* p = findUserByName(s);
-    string id = "H" + i->getID() + p->getUserID() + to_string(i->getQueueSize());
-    Hold h(id, i->getTitle(), p->getUserID(), i->getQueueSize()+1);
-    p->addHold(h);
-    i->addToQueue(h);
-    return true;
-}
+//bool Library::createHold(CatalogueItem* i, User* u){
+//    string s = u->getUserID();
+//    Patron* p = findUserByName(s);
+//    string id = "H" + i->getID() + p->getUserID() + to_string(i->getQueueSize());
+//    Hold h(id, i->getTitle(), p->getUserID(), i->getQueueSize()+1);
+//    p->addHold(h);
+//    i->addToQueue(h);
+//    return true;
+//}
 
-bool Library::cancelHold(CatalogueItem* i, User* u){
-    string s = u->getUserID();
-    Patron* p = findUserByName(s);
-    string t = i->getTitle();
-    bool a = p->removeHold(t);
-    if(a){
-        i->removeFromQueue(t);
-    }else{
-        return false;
-    }
-    return true;
-}
+//bool Library::cancelHold(CatalogueItem* i, User* u){
+//    string s = u->getUserID();
+//    Patron* p = findUserByName(s);
+//    string t = i->getTitle();
+//    bool a = p->removeHold(t);
+//    if(a){
+//        i->removeFromQueue(t);
+//    }else{
+//        return false;
+//    }
+//    return true;
+//}
 
 Librarian* Library::findStaffByName(string &s){
     cout << "Finding Staff: " + s << endl;
