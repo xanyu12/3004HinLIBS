@@ -31,10 +31,6 @@ void Catalogue::populate()
     NonFictionBook b9("NB00004", "How to Survive a Plague", "David France", 2016, Condition::New, "Paperback", Status::Available, "9780307745439", "362.19");
     NonFictionBook b10("NB00005", "Guns, Germs, and Steel", "Jared Diamonhd", 1997, Condition::Acceptable, "Hardcover", Status::Available, "9780393061314", "303.42");
 
-    Magazine m1("MA00001", "100th Anniversary Special", "Vogue", 1992, Condition::Acceptable, "Print", Status::Available, "19920401", Date(1, 4, 1992));
-    Magazine m2("MA00002", "The Hot Spring of Yellowstone", "National Geogrpahic", 2009, Condition::Fine, "Print", Status::Available, "216-2", Date(1, 8, 2009));
-    Magazine m3("MA00003", "Fast Break: NBA Superstar Jimmy Butler in California", "Architectural Digest", 2024, Condition::New, "Print", Status::Available, "20241101", Date(1, 11, 2024));
-
     Movie m4("MO00001", "Mickey 17", "Bong Joon Ho", 2025, Condition::New, "Blu-ray", Status::Available, "Sci-fi/Comedy", 10);
     Movie m5("MO00002", "Together", "Michael Shanks", 2025, Condition::New, "VHS Tape", Status::Available, "Horror", 7);
     Movie m6("MO00003", "Bones and All", "Luca Guadagnino", 2022, Condition::New, "DVD", Status::Available, "Horror/Romance", 8);
@@ -54,9 +50,6 @@ void Catalogue::populate()
     addItem(b8);
     addItem(b9);
     addItem(b10);
-    addItem(m1);
-    addItem(m2);
-    addItem(m3);
     addItem(m4);
     addItem(m5);
     addItem(m6);

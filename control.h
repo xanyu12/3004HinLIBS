@@ -4,7 +4,6 @@
 #include "defs.h"
 #include "boundary.h"
 #include "library.h"
-#include "database.h"
 
 class Control
 {
@@ -17,10 +16,18 @@ public:
     void handleAdminStart();
     void handlePatronStart();
     void handleLibrarianStart();
+
+    void handleLibrarianHome();
+    void handleLibrarianAdd();
+    void handleLibrarianRemove();
+    void handleLibrarianManage();
+
     void handlePatronBrowse();
     void handlePatronMyAccount();
     void handlePatronHome();
+
     void handleLogout();
+    void userSearch(string& user);
 
 
     void handlePatronLogin(string& cardNum, string& pin);
@@ -28,8 +35,11 @@ public:
     void handleLibrarianLogin(string& username, string& password);
     bool checkOutItem(string& s);
     bool checkInItem(string& s);
+    bool checkInStaff(string& s, string& n);
     bool placeHold(string& s);
     bool cancelHold(string& s);
+    bool addItem(CatalogueItem* c, string& type);
+    bool removeItem(string& s);
     void loadLibrary();
 
 private:

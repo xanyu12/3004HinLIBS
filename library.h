@@ -12,24 +12,27 @@ class Library
     Library();
     ~Library();
 
-//    void populateUsers();
-//    void addUser(Patron& p);
-//    void addStaff(Librarian& l);
-//    void addAdmin(Admin& a);
-//    void loadCatalogue();
-
-//    CatalogueItem* findItem(string& s);
-
-
     Librarian* findStaffByName(string& s);
     Admin* findAdminByName(string& s);
     Patron* findUserByNum(string& n);
     Patron* findUserByName(string & s);
 
+    string findStaff(string& s);
+    string findAdmin(string& s);
+    int findUser(string& n);
+
     bool checkInItem(string& itemID, string& userID);
     bool checkOutItem(string& itemID, string& userID);
     bool createHold(string& itemID, string& userID);
     bool cancelHold(string& itemID, string& userID);
+    bool addItem(CatalogueItem* c, string& type);
+    bool removeItem(string& itemID);
+
+    Status translateToStatus(string& s);
+
+    int getNumHolds(string& userID);
+    int getNumLoans(string& userID);
+
 
     double calculateFine(Date& d1, Date& d2);
     int getNumUsers();
@@ -39,8 +42,19 @@ class Library
     Date getToday();
     Date convertFromString(string& s);
 
+    int getCatalogueSize();
+    int getDaysLeft(int i, string& userID);
+    QString getItem(int i, int j);
+    QString getLoanTitle(int i, string& userID);
+    QString getLoanDate(int i, string& userID);
+    QString getHoldTitle(int i, string& userID);
+    QString getHoldPos(int i, string& userID);
+
+
+
 private:
     QSqlDatabase db;
+
 
     Catalogue collection;
     int numUsers;

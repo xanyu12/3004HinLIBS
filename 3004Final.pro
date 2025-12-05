@@ -13,7 +13,6 @@ SOURCES += \
     catalogue.cpp \
     catalogueItem.cpp \
     control.cpp \
-    database.cpp \
     date.cpp \
     fine.cpp \
     hold.cpp \
@@ -28,7 +27,6 @@ HEADERS += \
     catalogue.h \
     catalogueItem.h \
     control.h \
-    database.h \
     date.h \
     defs.h \
     fine.h \

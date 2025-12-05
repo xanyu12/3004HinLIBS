@@ -3,6 +3,7 @@
 
 #include "defs.h"
 #include "ui_mainwindow.h"
+#include "library.h"
 #include <QObject>
 #include <QString>
 #include <QTableWidget>
@@ -20,14 +21,17 @@ public:
     Boundary(Ui::MainWindow* ui);
 
     string getSearchInput();
-    void displayCatalogue();
-    void displayLoans();
-    void displayHolds();
-    void displayAccount();
+    void displayCatalogue(Library* l);
+    void displayCatalogueStaff(Library* l);
+    void displayLoans(string& s, Library* l);
+    void displayLoansStaff(string& s, Library* l);
+    void displayHolds(string& s, Library* l);
+    void displayAccount(Patron p);
 
     void displayAdminLoginError(string& e);
     void displayStaffLoginError(string& e);
     void displayPatronLoginError(string& e);
+
 
     void showStartPage();
     void showAdminLogin();
@@ -37,6 +41,9 @@ public:
     void showPatronCataloguePage();
     void showPatronAccountPage();
     void showStaffHomePage();
+    void showStaffAddPage();
+    void showStaffRemovePage();
+    void showStaffManagePage();
     void showAdminHomePage();
 
 private:

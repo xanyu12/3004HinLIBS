@@ -29,7 +29,7 @@ private:
 
 class Patron : public User{
 public:
-    Patron(string="", string="", string="", string="", string="", double=0.0, bool="");
+    Patron(string="", string="", string="", string="", string="", double=0.0, string="");
 
     string getCardNum();
     string getPin();
@@ -55,7 +55,7 @@ public:
     string libCardNum;
     string pin;
     double accountBalance;
-    bool accountStatus;
+    string accountStatus;
     Loan loanArr[MAX_LOANS];
     Fine paymentHistory[MAX_ARR];
     Hold holdArr[MAX_ARR];

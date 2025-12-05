@@ -10,14 +10,37 @@ void Control::setUser(User* u){
     currentUser = u;
 }
 
+bool Control::addItem(CatalogueItem *c, string& type){
+    cout << "ADDING " + c->getTitle() << endl;
+    bool b = library_->addItem(c, type);
+    if(b == true){
+        cout << "ITEM ADDED" << endl;
+        //clear spaces with boundary 3
+        return true;
+    }
+    cout << "FAILED ADD" << endl;
+    return false;
+}
+
+bool Control::removeItem(string &s){
+    cout << "REMOVING " + s << endl;
+    bool b  = library_->removeItem(s);
+    if(b == true){
+        cout << "ITEM REMOVED" << endl;
+        ui->displayCatalogueStaff(library_);
+        return true;
+    }
+    cout << "FAILED REMOVE" << endl;
+    return false;
+}
+
 bool Control::checkOutItem(string &s){
     cout << "Checking Out: " + s << endl;
-    CatalogueItem* item = library_->findItem(s);
-    bool b = library_->checkOutItem(item, currentUser);
+    string user = currentUser->getUserID();
+    bool b = library_->checkOutItem(s, user);
     if(b == true){
         cout << "DONE CHECKOUT" << endl;
-        Catalogue cat = library_->getCatalogue();
-        ui->displayCatalogue(cat);
+        ui->displayCatalogue(library_);
         return true;
     }
     cout << "FAILED CHECKOUT" << endl;
@@ -27,8 +50,8 @@ bool Control::checkOutItem(string &s){
 
 bool Control::checkInItem(string &s){
     cout << "Checking In: " + s << endl;
-    CatalogueItem* item = library_->findItem(s);
-    bool b = library_->checkInItem(item, currentUser);
+    string user = currentUser->getUserID();
+    bool b = library_->checkInItem(s, user);
     if(b == true){
         cout << "DONE CHECK IN" << endl;
         return true;
@@ -40,8 +63,8 @@ bool Control::checkInItem(string &s){
 
 bool Control::placeHold(string& s){
     cout << "Placing Hold: " + s << endl;
-    CatalogueItem* item = library_->findItem(s);
-    bool b = library_->createHold(item, currentUser);
+    string user = currentUser->getUserID();
+    bool b = library_->createHold(s, user);
     if(b == true){
         return true;
     }
@@ -50,8 +73,8 @@ bool Control::placeHold(string& s){
 
 bool Control::cancelHold(string& s){
     cout << "Cancelling Hold: " + s << endl;
-    CatalogueItem* item = library_->findItem(s);
-    bool b = library_->cancelHold(item, currentUser);
+    string user = currentUser->getUserID();
+    bool b = library_->cancelHold(s, user);
     if(b == true){
         return true;
     }
@@ -59,7 +82,6 @@ bool Control::cancelHold(string& s){
 }
 
 void Control::runSystem(){
-    loadLibrary();
     ui->showStartPage();
 }
 
@@ -79,9 +101,22 @@ void Control::handleLibrarianStart(){
     ui->showLibrarianLogin();
 }
 
+void Control::handleLibrarianHome(){
+    ui->showStaffHomePage();
+}
+void Control::handleLibrarianAdd(){
+    ui->showStaffAddPage();
+}
+void Control::handleLibrarianRemove(){
+    ui->displayCatalogueStaff(library_);
+    ui->showStaffRemovePage();
+}
+void Control::handleLibrarianManage(){
+    ui->showStaffManagePage();
+}
+
 void Control::handlePatronBrowse(){
-    Catalogue p = library_->getCatalogue();
-    ui->displayCatalogue();
+    ui->displayCatalogue(library_);
     ui->showPatronCataloguePage();
 }
 
@@ -89,8 +124,8 @@ void Control::handlePatronMyAccount(){
     string s = currentUser->getUserID();
     Patron* p = library_->findUserByName(s);
     cout << "Current User: " + p->getName() << endl;
-    ui->displayHolds();
-    ui->displayLoans();
+    ui->displayHolds(s, library_);
+    ui->displayLoans(s, library_);
     ui->showPatronAccountPage();
 }
 
@@ -137,6 +172,8 @@ void Control::handlePatronLogin(string &cardNum, string &pin){
     cout << "Card: " + cardNum << endl;
     Patron* pat = library_->findUserByNum(cardNum);
     string err = "";
+    cout << pat->getPin() << endl;
+    cout << pat->getName() << endl;
     if(pat){
          cout << "User Found" << endl;
         if(pat->getPin() == pin){
@@ -156,3 +193,32 @@ void Control::handleLogout(){
     setUser(nullptr);
     ui->showStartPage();
 }
+
+void Control::userSearch(string& num){
+    Patron *p = library_->findUserByNum(num);
+    if(p){
+        cout << "User Found" << endl;
+        string s = p->getUserID();
+        ui->displayLoansStaff(s, library_);
+    }else{
+        cout << "User Not Found" << endl;
+    }
+}
+
+bool Control::checkInStaff(string &s, string& n){
+    Patron *p = library_->findUserByNum(n);
+    if(p){
+        cout << "User Found" << endl;
+        string u = p->getUserID();
+        bool b = library_->checkInItem(s, u);
+        if(b == true){
+            cout << "DONE CHECK IN" << endl;
+            return true;
+        }
+    }
+    cout << "FAILED CHECK IN" << endl;
+    return false;
+}
+
+
+

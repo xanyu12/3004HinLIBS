@@ -195,7 +195,7 @@ void MainWindow::on_patronHoldTable_cellDoubleClicked(int row, int column)
     QMessageBox::StandardButton reply;
     reply = QMessageBox::question(
                 this,
-                "Confirm Checkout",
+                "Confirm Hold Cancel",
                 "Are you sure you want to check in this item?",
                 QMessageBox::Yes|QMessageBox::No);
     if(reply == QMessageBox::Yes){
@@ -249,6 +249,202 @@ void MainWindow::on_CatalogueTable_cellDoubleClicked(int row, int column)
         }else{
             QMessageBox::information(this, "Cancelled", "Hold Cancelled");
         }
+    }
+}
+
+
+void MainWindow::on_addItemButton_clicked()
+{
+    controller->handleLibrarianAdd();
+}
+
+
+void MainWindow::on_removeItemButton_clicked()
+{
+   controller->handleLibrarianRemove();
+}
+
+
+void MainWindow::on_managePatronButton_clicked()
+{
+    controller->handleLibrarianManage();
+}
+
+
+void MainWindow::on_staffBackFromAddButton_clicked()
+{
+    controller->handleLibrarianHome();
+}
+
+
+void MainWindow::on_staffLogoutFromAddButton_clicked()
+{
+    controller->handleLogout();
+    ui->userInput->setText("");
+    ui->passwordInput->setText("");
+    ui->staffErrorLabel->setText("");
+
+}
+
+
+void MainWindow::on_staffBackFromRemoveButton_clicked()
+{
+    controller->handleLibrarianHome();
+
+}
+
+
+void MainWindow::on_staffLogoutFromRemoveButton_clicked()
+{
+    controller->handleLogout();
+    ui->userInput->setText("");
+    ui->passwordInput->setText("");
+    ui->staffErrorLabel->setText("");
+
+}
+
+void MainWindow::on_staffBackFromManageButton_clicked()
+{
+    controller->handleLibrarianHome();
+}
+
+
+void MainWindow::on_staffLogoutFromManageButton_clicked()
+{
+    controller->handleLogout();
+    ui->userInput->setText("");
+    ui->passwordInput->setText("");
+    ui->staffErrorLabel->setText("");
+}
+
+
+
+void MainWindow::on_staffPatronSearchButton_clicked()
+{
+    QString user = ui->staffPatronSearchInput->text();
+    string u = user.toStdString();
+    controller->userSearch(u);
+}
+
+void MainWindow::on_addButton_clicked()
+{
+    if(!controller){
+        return;
+    }
+    CatalogueItem* c;
+    string temp;
+
+    QString id = ui->idInput->text();
+    QString title = ui->titleInput->text();
+    QString creator = ui->creatorInput->text();
+    QString type = ui->typeInput->currentText();
+    QString format = ui->formatInput->text();
+    QString year = ui->yearInput->text();
+
+    if(type == "Fiction Book" || type == "Non Fiction Book"){
+        QString isbn = ui->isbnInput->text();
+        if(type == "Non Fiction Book"){
+            QString dewey = ui->deweyInput->text();
+            c = new NonFictionBook(id.toStdString(), title.toStdString(), creator.toStdString(), year.toInt(), Condition::New, format.toStdString(), Status::Available, isbn.toStdString(), dewey.toStdString());
+            temp = "BOOK";
+        }else{
+            c = new FictionBook(id.toStdString(), title.toStdString(), creator.toStdString(), year.toInt(), Condition::New, format.toStdString(), Status::Available, isbn.toStdString());
+            temp = "BOOK";
+        }
+    }else if(type == "Movie" || type == "Video Game"){
+        QString genre = ui->genreInput->text();
+        QString rating = ui->ratingInput->text();
+        if(type == "Movie"){
+            c = new Movie(id.toStdString(), title.toStdString(), creator.toStdString(), year.toInt(), Condition::New, format.toStdString(), Status::Available, genre.toStdString(), rating.toInt());
+            temp = "MOVIE";
+        }else{
+            c = new VideoGame(id.toStdString(), title.toStdString(), creator.toStdString(), year.toInt(), Condition::New, format.toStdString(), Status::Available, genre.toStdString(), rating.toInt());
+            temp = "GAME";
+        }
+    }else if(type == "Magazine"){
+        QString date = ui->dateInput->text();
+        QString issue = ui->issueInput->text();
+        c = new Magazine(id.toStdString(), title.toStdString(), creator.toStdString(), year.toInt(), Condition::New, format.toStdString(), Status::Available, issue.toStdString(), date.toStdString());
+        temp = "MAGAZINE";
+    }else{
+        cout << "NOT ENOUGH INFO ERROR" << endl;
+        return;
+    }
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm New Item",
+                "Are you sure you want to add this item to the catalogue?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        bool a = controller->addItem(c, temp);
+        if(a == true){
+            QMessageBox::information(this, "ADD SUCCESSFUL", title + " has been added to the catalogue. Thank you!");
+        }else{
+            QMessageBox::warning(this, "ADD UNSUCCESSFUL", "We are unable to complete this action.");
+        }
+    }else{
+        QMessageBox::information(this, "Cancelled", "Add Cancelled");
+
+    }
+
+}
+
+
+void MainWindow::on_CatalogueTableStaffRemove_cellDoubleClicked(int row, int column)
+{
+    if(!controller){
+        return;
+    }
+    QString id = ui->CatalogueTableStaffRemove->item(row, 0)->text();
+    string s = id.toStdString();
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm Removal",
+                "Are you sure you want to remove this item?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        bool a = controller->removeItem(s);
+        if(a == true){
+            QMessageBox::information(this, "REMOVAL SUCCESSFUL", id + " has been removed from the catalogue. Thank you!");
+        }else{
+            QMessageBox::warning(this, "REMOVAL UNSUCCESSFUL", "We are unable to complete this action.");
+        }
+    }else{
+        QMessageBox::information(this, "Cancelled", "Removal Cancelled");
+
+    }
+}
+
+
+void MainWindow::on_StaffUserLoanTable_cellDoubleClicked(int row, int column)
+{
+    if(!controller){
+        return;
+    }
+    QString id = ui->StaffUserLoanTable->item(row, 0)->text();
+    string s = id.toStdString();
+    QString user = ui->staffPatronSearchInput->text();
+    string u = user.toStdString();
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(
+                this,
+                "Confirm Checkin",
+                "Are you sure you want to check in " + id + " for " + user + "?",
+                QMessageBox::Yes|QMessageBox::No);
+    if(reply == QMessageBox::Yes){
+        bool  a = controller->checkInStaff(s, u);
+        if(a == true){
+            QMessageBox::information(this, "CHECKIN SUCCESSFUL", id + " has been removed from users account. Thank you!");
+        }else{
+            QMessageBox::warning(this, "CHECKIN UNSUCCESSFUL", "We are unable to complete this action.");
+        }
+    }else{
+        QMessageBox::information(this, "Cancelled", "Checkin Cancelled");
+
     }
 }
 

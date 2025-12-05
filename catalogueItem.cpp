@@ -15,7 +15,7 @@ FictionBook::FictionBook(string id, string title, string creator, int publicatio
 NonFictionBook::NonFictionBook(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string isbn, string deweyNum)
     : Book(id, title, creator, publicationYear, condition, format, circulationStatus, isbn), deweyNumber_(deweyNum){}
 
-Magazine::Magazine(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string issueNum, Date publicationDate)
+Magazine::Magazine(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string issueNum, string publicationDate)
     : CatalogueItem(id, title, creator, publicationYear, condition, format, circulationStatus), issueNumber_(issueNum), publicationDate_(publicationDate){}
 
 Movie::Movie(string id, string title, string creator, int publicationYear, Condition condition, string format, Status circulationStatus, string genre, int rating)
@@ -81,6 +81,8 @@ string CatalogueItem::translateStatus(Status s){
         return "Withdrawn";
     }
 }
+
+
 
 /*
  * Function: Translate book condition status from enum to string

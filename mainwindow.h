@@ -62,6 +62,32 @@ private slots:
 
     void on_CatalogueTable_cellDoubleClicked(int row, int column);
 
+    void on_addItemButton_clicked();
+
+    void on_removeItemButton_clicked();
+
+    void on_managePatronButton_clicked();
+
+    void on_staffBackFromAddButton_clicked();
+
+    void on_staffLogoutFromAddButton_clicked();
+
+    void on_staffBackFromRemoveButton_clicked();
+
+    void on_staffLogoutFromRemoveButton_clicked();
+
+    void on_staffPatronSearchButton_clicked();
+
+    void on_staffBackFromManageButton_clicked();
+
+    void on_staffLogoutFromManageButton_clicked();
+
+    void on_addButton_clicked();
+
+    void on_CatalogueTableStaffRemove_cellDoubleClicked(int row, int column);
+
+    void on_StaffUserLoanTable_cellDoubleClicked(int row, int column);
+
 private:
     Ui::MainWindow *ui;
     Control* controller;

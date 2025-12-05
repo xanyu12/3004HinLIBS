@@ -6,7 +6,7 @@ Library::Library(){
     numAdmin = 0;
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setDatabaseName("/home/student/3004HinLIBS/PRAChinlibs.db");
+    db.setDatabaseName("/home/student/3004HinLIBS/hinlibs.db");
 
     if(!db.open()){
         cout << "CANNOT CONNECT" << endl;
@@ -21,150 +21,161 @@ Library::~Library(){
     }
 }
 
-bool Library::checkInItem(string& itemID, string& userID){
+bool Library::checkOutItem(string& itemID, string& userID){
     QSqlQuery query;
-    query.prepare("SELECT status FROM catalogue WHERE itemID = :id");
+    query.prepare("SELECT * FROM catalogue WHERE title = :id");
     query.bindValue(":id", QString::fromStdString(itemID));
     query.exec();
-    if(query.next()){
-        string itemStatus = query.value("status").toString().toStdString();
-        if(itemStatus == "Available"){
-            query.prepare("SELECT status FROM users WHERE userID = :id");
-            query.bindValue(":id", QString::fromStdString(userID));
-            query.exec();
-            if(query.next()){
-                string userStatus = query.value("status").toString().toStdString();
-                if(userStatus == "Active"){
-                    query.prepare("SELECT currentLoanNum FROM patron WHERE userID = :id");
-                    query.bindValue(":id", QString::fromStdString(userID));
-                    query.exec();
-                    if(query.next()){
-                        int userLoan = query.value("currentLoanNum").toInt();
-                        if(userLoan <= 3){
-                            userLoan++;
-                            Date today = getToday();
-                            Date due = today + 14;
-                            string date1 = today.toString();
-                            string date2 = due.toString();
 
-                            query.prepare("UPDATE catalogue SET status = :s WHERE itemID = :d");
-                            query.bindValue(":s", "Unavailable");
-                            query.bindValue(":d", QString::fromStdString(userID));
-                            query.exec();
-                            if(!query.next()){
-                                cout << "UPDATE CATALOGUE PROBLEM" << endl;
-                                return false;
-                            }
-
-                            query.prepare("UPDATE patron SET currentLoanNum = :n WHERE userID = :d");
-                            query.bindValue(":n", userLoan);
-                            query.bindValue(":d", QString::fromStdString(userID));
-                            query.exec();
-                            if(!query.next()){
-                                cout << "UPDATE PATRON PROBLEM" << endl;
-                                return false;
-                            }
-
-                            query.prepare("INSERT INTO loans VALUES (:itemID, :userID, :loanDate, :dueDate, :returnDate)");
-                            query.bindValue(":itemID", QString::fromStdString(itemID));
-                            query.bindValue(":userID", QString::fromStdString(userID));
-                            query.bindValue(":loanDate", QString::fromStdString(date1));
-                            query.bindValue(":dueDate", QString::fromStdString(date2));
-                            query.bindValue(":returnDate", "");
-
-                            query.exec();
-                            if(!query.next()){
-                                cout << "INSERT LOAN PROBLEM" << endl;
-                                return false;
-                            }
-                            return true;
-                        }
-                        cout << "ERROR: USER AT MAX LOANS" << endl;
-                        return false;
-                    }else{
-                        cout << "ERROR: QUERY" << endl;
-                        return false;
-                    }
-                }else{
-                    cout << "ERROR: USER ACCOUNT LOCKED"  << endl;
-                    return false;
-                }
-            }else{
-                cout << "ERROR: QUERY" << endl;
-                return false;
-
-            }
-        }else{
-            cout << "ERROR: ITEM UNAVAILABLE" << endl;
-            return false;
-       }
-
-    }else{
-        cout << "ERROR: QUERY" << endl;
+    if(!query.next()){
+        qDebug() << "ERROR: Item not found:" << query.lastError();
         return false;
+    }
+    itemID = query.value("itemID").toString().toStdString();
+    string itemStatus = query.value("status").toString().toStdString();
 
+    if(itemStatus != "Available"){
+        cout << "ERROR: ITEM UNAVAILABLE" << endl;
+        return false;
     }
 
+    query.prepare("SELECT status FROM patron WHERE userID = :id");
+    query.bindValue(":id", QString::fromStdString(userID));
+    query.exec();
+    if(!query.next()){
+        return false;
+    }
+    string userStatus = query.value("status").toString().toStdString();
+    cout << userStatus << endl;
+
+    if(userStatus != "Active"){
+        cout << "ERROR: USER INACTIVE" << endl;
+    }
+    query.prepare("SELECT currentLoanNum FROM patron WHERE userID = :id");
+    query.bindValue(":id", QString::fromStdString(userID));
+    query.exec();
+    if(!query.next()){
+        return false;
+    }
+
+    int userLoan = query.value("currentLoanNum").toInt();
+    cout << userLoan << endl;
+    if(userLoan <= 3){
+        cout << "WE SHOULD BE GOOD" << endl;
+        userLoan++;
+        Date today = getToday();
+        Date due = today + 14;
+        string date1 = today.toString();
+        string date2 = due.toString();
+
+        query.prepare("UPDATE catalogue SET status = :s WHERE itemID = :d");
+        query.bindValue(":s", "Unavailable");
+        query.bindValue(":d", QString::fromStdString(itemID));
+        query.exec();
+        cout << "SUCCESS CATALOGUE?" << endl;
+
+        query.prepare("UPDATE patron SET currentLoanNum = :n WHERE userID = :d");
+        query.bindValue(":n", userLoan);
+        query.bindValue(":d", QString::fromStdString(userID));
+        query.exec();
+        cout << "SUCCESS PATRON" << endl;
+
+        query.prepare("INSERT INTO loans (itemID, userID, loanDate, dueDate) VALUES (:itemID, :userID, :loanDate, :dueDate)");
+        query.bindValue(":itemID", QString::fromStdString(itemID));
+        query.bindValue(":userID", QString::fromStdString(userID));
+        query.bindValue(":loanDate", QString::fromStdString(date1));
+        query.bindValue(":dueDate", QString::fromStdString(date2));
+        query.exec();
+        cout << "SUCCESS INSERT" << endl;
+
+        return true;
+    }else{
+        cout << "ERROR: MAX LOANS" << endl;
+    }
+
+    return false;
 }
-bool Library::checkOutItem(string& itemID, string& userID){
+bool Library::checkInItem(string& itemID, string& userID){
     //update book status
     QSqlQuery query;
-    query.prepare("SELECT loanID, dueDate FROM loans WHERE itemID = :itemID AND userID = :userID AND returnDate = :e");
-    query.bindValue(":itemID", QString::fromStdString(itemID));
-    query.bindValue(":userID", QString::fromStdString(userID));
-    query.bindValue(":e", "");
+    query.prepare("SELECT * FROM catalogue WHERE title = :id");
+    query.bindValue(":id", QString::fromStdString(itemID));
     query.exec();
 
-    if(query.next()){
-        string d = query.value("dueDate").toString().toStdString();
-        string lID = query.value("loanID").toString().toStdString();
-
-        Date today = getToday();
-        query.prepare("UPDATE loans SET returnDate = :r WHERE loanID = :loanID");
-        query.bindValue(":r", QString::fromStdString(today.toString()));
-        query.bindValue(":loanID", QString::fromStdString(lID));
-        query.exec();
-
-        Date dueDate = convertFromString(d);
-        double f = calculateFine(dueDate, today);
-        if(f > 0.00){
-            query.prepare("SELECT balance FROM patron WHERE userID = :u");;
-            query.bindValue(":u", QString::fromStdString(userID));
-            query.exec();
-
-            double fine = query.value("balance").toDouble();
-            double total = fine + f;
-            query.prepare("UPDATE patron SET balance = :b WHERE userID = :u");
-            query.bindValue(":b", total);
-            query.bindValue(":u", QString::fromStdString(userID));
-            query.exec();
-
-            query.prepare("INSERT INTO fines VALUES(:l, :a, :s");
-            query.bindValue(":l", QString::fromStdString(lID));
-            query.bindValue(":a", fine);
-            query.bindValue(":s", "UNPAID");
-            query.exec();
-
-        }
-        query.prepare("SELECT currentLoanNum FROM patron WHERE userID = :id");
-        query.bindValue(":id", QString::fromStdString(userID));
-        query.exec();
-        int loanNum = query.value("currentLoanNum").toInt();
-        loanNum++;
-        query.prepare("UPDATE patron SET currentLoanNum = :c WHERE userID = :u");
-        query.bindValue(":c", loanNum);
-        query.bindValue(":u", QString::fromStdString(userID));
-        query.exec();
-        query.prepare("UPDATE catalogue SET status = :a WHERE itemID = :id");
-        query.bindValue(":a", "Available");
-        query.bindValue(":id", QString::fromStdString(itemID));
-        query.exec();
-        return true;
-
-    }else{
-        cout << "ERROR: LOAN DATE" << endl;
+    if(!query.next()){
+        qDebug() << "ERROR: Item not found:" << query.lastError();
         return false;
     }
+    itemID = query.value("itemID").toString().toStdString();
+    query.prepare("SELECT * FROM loans WHERE itemID = :itemID AND userID = :userID AND returnDate IS NULL");
+    query.bindValue(":itemID", QString::fromStdString(itemID));
+    query.bindValue(":userID", QString::fromStdString(userID));
+    query.exec();
+
+    if(!query.next()){
+        qDebug() << "ERROR: Loan not found:" << query.lastError();
+        return false;
+    }
+    string d = query.value("dueDate").toString().toStdString();
+    string lID = query.value("loanID").toString().toStdString();
+    cout << "Due Date: " + d << endl;
+    cout << lID << endl;
+
+    Date today = getToday();
+    query.prepare("UPDATE loans SET returnDate = :r WHERE loanID = :loanID");
+    query.bindValue(":r", QString::fromStdString(today.toString()));
+    query.bindValue(":loanID", QString::fromStdString(lID));
+    query.exec();
+
+    Date dueDate = convertFromString(d);
+    double f = calculateFine(dueDate, today);
+    if(f > 0.00){
+        query.prepare("SELECT balance FROM patron WHERE userID = :u");;
+        query.bindValue(":u", QString::fromStdString(userID));
+        query.exec();
+        if(!query.next()){
+            cout << "Patron not found" << endl;
+            return false;
+        }
+        double fine = query.value("balance").toDouble();
+        double total = fine + f;
+        query.prepare("UPDATE patron SET balance = :b WHERE userID = :u");
+        query.bindValue(":b", total);
+        query.bindValue(":u", QString::fromStdString(userID));
+        query.exec();
+        cout << "SUCCESS PATRON" << endl;
+
+        query.prepare("INSERT INTO fines (loanID, amount, status) VALUES(:l, :a, :s)");
+        query.bindValue(":l", QString::fromStdString(lID));
+        query.bindValue(":a", fine);
+        query.bindValue(":s", "UNPAID");
+        query.exec();
+        cout << "SUCCESS FINES" << endl;
+
+    }
+    query.prepare("SELECT currentLoanNum FROM patron WHERE userID = :id");
+    query.bindValue(":id", QString::fromStdString(userID));
+    query.exec();
+    if(!query.next()){
+        cout << "USER ERROR" << endl;
+        return false;
+    }
+    int loanNum = query.value("currentLoanNum").toInt();
+    cout << loanNum << endl;
+    if(loanNum > 0){
+        loanNum--;
+    }
+    query.prepare("UPDATE patron SET currentLoanNum = :c WHERE userID = :u");
+    query.bindValue(":c", loanNum);
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+    cout << "SUCCESS PATRON" << endl;
+    query.prepare("UPDATE catalogue SET status = :a WHERE itemID = :id");
+    query.bindValue(":a", "Available");
+    query.bindValue(":id", QString::fromStdString(itemID));
+    query.exec();
+    cout << "SUCCESS CATALOGUE" << endl;
+    return true;
 }
 
 bool Library::createHold(string& itemID, string& userID){
@@ -172,13 +183,23 @@ bool Library::createHold(string& itemID, string& userID){
     //add user to item queue
     //increase user queue size
     QSqlQuery query;
+    query.prepare("SELECT * FROM catalogue WHERE title = :id");
+    query.bindValue(":id", QString::fromStdString(itemID));
+    query.exec();
+
+    if(!query.next()){
+        qDebug() << "ERROR: Item not found:" << query.lastError();
+        return false;
+    }
+    itemID = query.value("itemID").toString().toStdString();
+
     query.prepare("SELECT availability FROM catalogue WHERE itemID = :i");
-    query.bindValue("i", QString::fromStdString(itemID));
+    query.bindValue(":i", QString::fromStdString(itemID));
     query.exec();
     if(!query.next()){
         return false;
     }
-    string avail = query.value("availabillity").toString().toStdString();
+    string avail = query.value("availability").toString().toStdString();
     if(avail == "Available"){
         return false;
     }
@@ -192,7 +213,7 @@ bool Library::createHold(string& itemID, string& userID){
     int queueSize = query.value("queueSize").toInt();
     queueSize++;
 
-    query.prepare("INSERT INTO holds VALUES (:itemID, :userID, :pos)");
+    query.prepare("INSERT INTO holds (itemID, userID, position) VALUES (:itemID, :userID, :pos)");
     query.bindValue(":itemID", QString::fromStdString(itemID));
     query.bindValue(":userID", QString::fromStdString(userID));
     query.bindValue(":pos", queueSize);
@@ -203,6 +224,10 @@ bool Library::createHold(string& itemID, string& userID){
     query.bindValue(":i", QString::fromStdString(itemID));
     query.exec();
 
+    query.prepare("UPDATE patron SET currentHoldNum = currentHoldNum + 1 WHERE userID = :u");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+
     return true;
 }
 bool Library::cancelHold(string& itemID, string& userID){
@@ -210,6 +235,15 @@ bool Library::cancelHold(string& itemID, string& userID){
     //update item queue
     //reduce user queue size
     QSqlQuery query;
+    query.prepare("SELECT * FROM catalogue WHERE title = :id");
+    query.bindValue(":id", QString::fromStdString(itemID));
+    query.exec();
+
+    if(!query.next()){
+        qDebug() << "ERROR: Item not found:" << query.lastError();
+        return false;
+    }
+    itemID = query.value("itemID").toString().toStdString();
     query.prepare("SELECT position from holds WHERE itemID = :i and userID = :u");
     query.bindValue(":i", QString::fromStdString(itemID));
     query.bindValue(":u", QString::fromStdString(userID));
@@ -232,9 +266,12 @@ bool Library::cancelHold(string& itemID, string& userID){
     query.bindValue(":u", QString::fromStdString(userID));
     query.exec();
 
+    query.prepare("UPDATE patron SET currentHoldNum = currentHoldNum - 1 WHERE userID = :u");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+
     return true;
 }
-
 
 Date Library::convertFromString(string &s){
     string tempD = "";
@@ -258,70 +295,6 @@ Date Library::convertFromString(string &s){
     return newD;
 }
 
-
-//void Library::populateUsers(){
-//    Patron p1("julia74", "Julia Salvatore","julia1974@gmail.com", "101000001", "1234", 0.0, true);
-//    Patron p2("nominomi", "Naomi Carthen", "ncarthen@gmail.com", "101000002", "2345", 0.0, true);
-//    Patron p3("pengting", "Elena Peng", "elenap@gmail.com", "101000003", "3456",  0.0, true);
-//    Patron p4("nene1999", "Nene Leakes", "laneithia@gmail.com", "101000004", "4567", 0.0, true);
-//    Patron p5("santana", "Bonnie Santana", "bonbon@gmail.com", "101000005", "5678",  0.0, true);
-//    Librarian p6("jojojoestar", "Jonathan Joestar", "jj@gmail.com", "pa55wd");
-//    Admin p7("bigmike", "Michael Scott", "mike.scott@gmail.com", "secret!");
-
-//    addUser(p1);
-//    addUser(p2);
-//    addUser(p3);
-//    addUser(p4);
-//    addUser(p5);
-
-//    addStaff(p6);
-
-//    addAdmin(p7);
-
-//    cout << "Populated Users" << endl;
-//}
-
-//void Library::loadCatalogue(){
-//    collection.populate();
-
-//    cout << "Loaded Catalogue" << endl;
-//}
-
-//void Library::addUser(Patron& u){
-//  if(numUsers < MAX_ARR){
-//      cout << "Adding User: " + u.getUserID()<< endl;
-//      users[numUsers] = u;
-//      numUsers++;
-//  }else{
-//      cout << "Maximum Users Reached" << endl;
-//  }
-//}
-
-//void Library::addStaff(Librarian &l){
-//  if(numStaff < MAX_ARR){
-//      cout << "Adding Staff: " + l.getUserID() << endl;
-//      staff[numStaff] = l;
-//      numStaff++;
-//  }else{
-//      cout << "Maximum Staff Reached" << endl;
-//  }
-//}
-
-//void Library::addAdmin(Admin &a){
-//  if(numAdmin < MAX_ARR){
-//      cout << "Adding Admin: " + a.getUserID() << endl;
-//      admin[numAdmin] = a;
-//      numAdmin++;
-//  }else{
-//      cout << "Maximum Staff Reached" << endl;
-//  }
-//}
-
-
-//CatalogueItem* Library::findItem(string &s){
-//    return collection.search(s);
-//}
-
 double Library::calculateFine(Date &d1, Date &d2){
     if(d2 - d1 > LOAN_PERIOD){
         int daysOverdue = (d2 - d1) - LOAN_PERIOD;
@@ -342,111 +315,243 @@ Date Library::getToday(){
     return today;
 }
 
-//bool Library::checkInItem(CatalogueItem* i, User* u){
-//    string s = u->getUserID();
-//    Patron* p = findUserByName(s);
-//    Loan* thisLoan = p->getLoanByItem(*i);
-//    Date returnDay = getToday();
-//    Date loanDay = thisLoan->getLoanDate();
-//    double total = calculateFine(loanDay, returnDay);
-//    if(total > 0.00){
-//        string id = "F" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-//        Fine f(id, total);
-//        p->addFine(f);
-//        thisLoan->setFine(total);
-//    }
-//    thisLoan->setReturnDate(returnDay);
-//    i->checkIn();
-//    return true;
-//}
-
-//bool Library::checkOutItem(CatalogueItem* i, User* u){
-//    string s = u->getUserID();
-//    Patron* p = findUserByName(s);
-//    cout << "Checking out item: " + i->getTitle() + " for " + p->getUserID() << endl;
-//    if(i->getCirculationStatus() == Status::Available && p->getAccountStatus() == "Active"){
-//        cout << "Borrow Available" << endl;
-//        Date loanDay = getToday();
-//        string id = "L" + i->getID() + p->getUserID() + to_string(loanDay.getDay()) + to_string(loanDay.getMonth());
-//        Loan newLoan(id, loanDay, 0, 0.0);
-//        newLoan.setItem(i);
-//        bool a = p->addLoan(newLoan);
-//        if(a == true){
-//            cout << "CHECKED OUT" << endl;
-//            i->checkOut();
-//        }else{
-//            return false;
-//        }
-//        return true;
-//    }else{
-//        return false;
-//    }
-//}
-
-//bool Library::createHold(CatalogueItem* i, User* u){
-//    string s = u->getUserID();
-//    Patron* p = findUserByName(s);
-//    string id = "H" + i->getID() + p->getUserID() + to_string(i->getQueueSize());
-//    Hold h(id, i->getTitle(), p->getUserID(), i->getQueueSize()+1);
-//    p->addHold(h);
-//    i->addToQueue(h);
-//    return true;
-//}
-
-//bool Library::cancelHold(CatalogueItem* i, User* u){
-//    string s = u->getUserID();
-//    Patron* p = findUserByName(s);
-//    string t = i->getTitle();
-//    bool a = p->removeHold(t);
-//    if(a){
-//        i->removeFromQueue(t);
-//    }else{
-//        return false;
-//    }
-//    return true;
-//}
-
-Librarian* Library::findStaffByName(string &s){
-    cout << "Finding Staff: " + s << endl;
-    for(int i = 0; i < numStaff; ++i){
-        if(staff[i].getUserID() == s){
-            return &staff[i];
-        }
+Status Library::translateToStatus(string& s){
+    if(s == "Available"){
+        return Status::Available;
+    }else if(s == "Unavailable"){
+        return Status::Unavailable;
+    }else if(s == "Missing"){
+        return Status::Missing;
+    }else if(s == "Withdrawn"){
+        return Status::Withdrawn;
+    }else{
+        return Status::Unavailable;
     }
-    return nullptr;
 }
 
-Patron* Library::findUserByNum(string &n){
-    cout << "Finding User: " + n << endl;
-    for(int i = 0; i < numUsers; ++i){
-        if(users[i].getCardNum() == n){
-            return &users[i];
-        }
+int Library::getCatalogueSize(){
+    QSqlQuery query;
+    query.prepare("SELECT COUNT(*) FROM catalogue");
+    query.exec();
+    if(!query.next()){
+        return -1;
     }
-    return nullptr;
+    int ans = query.value(0).toInt();
+    return ans;
 }
 
-Patron* Library::findUserByName(string &n){
-    cout << "Finding User: " + n << endl;
-    for(int i = 0; i < numUsers; ++i){
-        if(users[i].getUserID() == n){
-            return &users[i];
-        }
+QString Library::getItem(int i, int j){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM catalogue LIMIT 1 OFFSET :i");
+    query.bindValue(":i", i);
+    query.exec();
+    if(!query.next()){
+        return nullptr;
     }
-    return nullptr;
+    QString ans = query.value(j).toString();
+    return ans;
 }
 
-Catalogue Library::getCatalogue(){
-    return collection;
-}
-
-Admin* Library::findAdminByName(string &s){
-    cout << "Finding Admin: " + s << endl;
-    for(int i = 0; i < numAdmin; ++i){
-        if(admin[i].getUserID() == s){
-            return &admin[i];
-        }
+QString Library::getLoanTitle(int i, string& userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM loans l, catalogue c WHERE l.userID = :u AND l.returnDate IS NULL AND l.itemID = c.itemID LIMIT 1 OFFSET :i ");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.bindValue(":i", i);
+    query.exec();
+    if(!query.next()){
+        return nullptr;
     }
-    return nullptr;
+    QString ans = query.value("title").toString();
+    cout  << ans.toStdString() << endl;
+    return ans;
 }
+
+int Library::getDaysLeft(int i, string &userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM loans WHERE userID = :u AND returnDate IS NULL LIMIT 1 OFFSET :i");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.bindValue(":i", i);
+    query.exec();
+    if(!query.next()){
+        return -1;
+    }
+    string d = query.value("dueDate").toString().toStdString();
+    Date due = convertFromString(d);
+    cout << due.toString() << endl;
+    Date today = getToday();
+    int num = due - today;
+    cout << num << endl;
+    return num;
+}
+
+QString Library::getLoanDate(int i, string &userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM loans WHERE userID = :u AND returnDate IS NULL LIMIT 1 OFFSET :i");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.bindValue(":i", i);
+    query.exec();
+    if(!query.next()){
+        return nullptr;
+    }
+    QString ans = query.value("dueDate").toString();
+    return ans;
+}
+
+QString Library::getHoldTitle(int i, string &userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM holds l, catalogue c WHERE l.userID = :u AND l.itemID = c.itemID LIMIT 1 OFFSET :i ");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.bindValue(":i", i);
+    query.exec();
+    if(!query.next()){
+        return nullptr;
+    }
+    QString ans = query.value("title").toString();
+    return ans;
+}
+
+QString Library::getHoldPos(int i, string &userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM holds WHERE userID = :u LIMIT 1 OFFSET :i");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.bindValue(":i", i);
+    query.exec();
+    if(!query.next()){
+        return nullptr;
+    }
+    QString ans = query.value("position").toString();
+    return ans;
+}
+
+Librarian* Library::findStaffByName(string& s){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM users u, librarians l WHERE u.userID = :s AND u.userID = l.userID");
+    query.bindValue(":s", QString::fromStdString(s));
+    query.exec();
+    if(!query.next()){
+        return nullptr;
+    }
+    string name = query.value("name").toString().toStdString();
+    string password = query.value("password").toString().toStdString();
+    string contact = query.value("contact").toString().toStdString();
+    Librarian* l = new Librarian(s, name, contact, password);
+    return l;
+}
+
+Admin* Library::findAdminByName(string& s){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM users u, admins l WHERE u.userID = :s AND u.userID = l.userID");
+    query.bindValue(":s", QString::fromStdString(s));
+    query.exec();
+    if(!query.next()){
+        return nullptr;
+    }
+    string name = query.value("name").toString().toStdString();
+    string password = query.value("password").toString().toStdString();
+    string contact = query.value("contact").toString().toStdString();
+    Admin* l = new Admin(s, name, contact, password);
+    return l;
+}
+
+Patron* Library::findUserByNum(string& n){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM patron p, users u WHERE p.cardNumber = :n AND u.userID = p.userID");
+    query.bindValue(":n", QString::fromStdString(n));
+    query.exec();
+    if(!query.next()){
+       return nullptr;
+    }
+    string userID = query.value("userID").toString().toStdString();
+    string name = query.value("name").toString().toStdString();
+    string contact = query.value("contact").toString().toStdString();
+    string pin = query.value("pin").toString().toStdString();
+    double balance = query.value("balance").toDouble();
+    string status = query.value("status").toString().toStdString();
+    Patron* p = new Patron(userID, name, contact, n, pin, balance, status);
+    return p;
+}
+Patron* Library::findUserByName(string & s){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM users u, patron l WHERE u.userID = :s AND u.userID = l.userID");
+    query.bindValue(":s", QString::fromStdString(s));
+    query.exec();
+    if(!query.next()){
+        return nullptr;
+    }
+    string name = query.value("name").toString().toStdString();
+    string contact = query.value("contact").toString().toStdString();
+    string libCard = query.value("cardNumber").toString().toStdString();
+    string pin = query.value("pin").toString().toStdString();
+    double balance = query.value("balance").toDouble();
+    string status = query.value("status").toString().toStdString();
+    Patron* l = new Patron(s, name, contact, libCard, pin, balance, status);
+    return l;
+}
+
+int Library::getNumHolds(string &userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM patron WHERE userID = :u");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+    if(!query.next()){
+        cout << "ERROR: USER NOT FOUND" << endl;
+        return -1;
+    }
+    int num = query.value("currentHoldNum").toInt();
+    return num;
+}
+
+int Library::getNumLoans(string &userID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM patron WHERE userID = :u");
+    query.bindValue(":u", QString::fromStdString(userID));
+    query.exec();
+    if(!query.next()){
+        cout << "ERROR: USER NOT FOUND" << endl;
+        return -1;
+    }
+    int num = query.value("currentLoanNum").toInt();
+    return num;
+}
+
+bool Library::addItem(CatalogueItem *c, string& type){
+    string condition = c->translateCondition(c->getCondition());
+    string status = c->translateStatus(c->getCirculationStatus());
+    QSqlQuery query;
+    query.prepare("INSERT INTO catalogue VALUES (:id, :title, :creator, :type, :year, :con, :form, :stat, :size)");
+    query.bindValue(":id", QString::fromStdString(c->getID()));
+    query.bindValue(":title", QString::fromStdString(c->getTitle()));
+    query.bindValue(":creator", QString::fromStdString(c->getCreator()));
+    query.bindValue(":type", QString::fromStdString(type));
+    query.bindValue(":year", c->getPublicationYear());
+    query.bindValue(":con", QString::fromStdString(condition));
+    query.bindValue(":form", QString::fromStdString(c->getFormat()));
+    query.bindValue(":stat", QString::fromStdString(status));
+    query.bindValue(":size", 0);
+    if(query.exec()){
+        return true;
+    }
+    return false;
+}
+
+bool Library::removeItem(string& itemID){
+    QSqlQuery query;
+    query.prepare("SELECT * FROM catalogue WHERE title = :id");
+    query.bindValue(":id", QString::fromStdString(itemID));
+    query.exec();
+
+    if(!query.next()){
+        qDebug() << "ERROR: Item not found:" << query.lastError();
+        return false;
+    }
+    itemID = query.value("itemID").toString().toStdString();
+    query.prepare("DELETE FROM catalogue WHERE itemID = :id");
+    query.bindValue(":id", QString::fromStdString(itemID));
+    if(query.exec()){
+        return true;
+    }else{
+        return false;
+    }
+}
+
 

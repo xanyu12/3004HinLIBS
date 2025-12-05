@@ -21,11 +21,7 @@ string User::getContact(){
 }
 
 string Patron::getAccountStatus(){
-    if(accountStatus){
-        return "Active";
-    }else{
-        return "Locked";
-    }
+    return accountStatus;
 }
 
 void User::addHold(Hold& h){return;}
@@ -34,7 +30,7 @@ Loan* User::getLoanByItem(CatalogueItem& c){return nullptr;}
 void User::addFine(Fine& f){return;}
 bool User::removeHold(string& s){return false;}
 
-Patron::Patron(string i, string n, string c, string l, string p, double b, bool s)
+Patron::Patron(string i, string n, string c, string l, string p, double b, string s)
     : User(i, n, c), libCardNum(l), pin(p), accountBalance(b), accountStatus(s){
     numFines = 0;
     numHolds = 0;
